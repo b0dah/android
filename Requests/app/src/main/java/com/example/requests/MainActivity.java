@@ -24,28 +24,31 @@ import java.net.URLDecoder;
 
 public class MainActivity extends AppCompatActivity {
 
-    String url = "http://176.59.71.245:7777"; // home ip "http://95.30.31.115:7777"; //;//;////"http://google.com";//"http://172.20.10.7:7777";//"http://192.168.43.115:7777";
+    //String url = "http://176.59.71.245:7777"; // home ip "http://95.30.31.115:7777"; //;//;////"http://google.com";//"http://172.20.10.7:7777";//"http://192.168.43.115:7777";
+
+    public static TextView responseTextView;
+    public static EditText urlEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sendPostRequest();
-        //sendGetRequest();
+        responseTextView = (TextView) findViewById(R.id.textViewID);
+
+        urlEdit = (EditText) findViewById(R.id.ipEdit);
+        urlEdit.setText("http://");
     }
 
     public void onSendButtonClick(View view) {
 
-
-
+        //sendPostRequest(String.valueOf(urlEdit.getText()));
+        sendGetRequest(String.valueOf(urlEdit.getText()));
     }
 
 
-
-
-    // MARK: funcs
-    private void sendGetRequest() {
+    // MARK: funcs -----------------------------
+    private void sendGetRequest(String url) {
 
         final TextView textView = (TextView) findViewById(R.id.textViewID);
 
@@ -71,12 +74,7 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    public void sendPostRequest() {
-
-        EditText ipEdit = (EditText) findViewById(R.id.ipEdit);
-
-        final TextView textView = (TextView) findViewById(R.id.textViewID);
-
+    public void sendPostRequest(String url) {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         System.out.println("------>" + response);
-                        textView.setText("Response is: "+ response);
+                        responseTextView.setText("Response is: "+ response);
 
                     }
                 },
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println("------> that's error!" + error);
-                        textView.setText("Response is: "+ error);
+                        responseTextView.setText("Response is: "+ error);
 
                     }
                 }
