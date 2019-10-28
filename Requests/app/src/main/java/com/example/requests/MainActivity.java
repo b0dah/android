@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSendButtonClick(View view) {
 
-        //sendPostRequest(String.valueOf(urlEdit.getText()));
-        sendGetRequest(String.valueOf(urlEdit.getText()));
+        sendPostRequest(String.valueOf(urlEdit.getText()));
+        //sendGetRequest(String.valueOf(urlEdit.getText()));
     }
 
 

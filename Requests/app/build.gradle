@@ -29,4 +29,10 @@ dependencies {
 
     // Volley library
     implementation 'com.mcxiaoke.volley:library:1.0.19'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
 }
+
+// For firebase
+apply plugin: 'com.google.gms.google-services'

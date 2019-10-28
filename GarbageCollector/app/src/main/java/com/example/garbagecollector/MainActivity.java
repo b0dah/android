@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new OrdersListViewAdapter(this, ordersList);
         ordersListView.setAdapter(listAdapter);
 
+        // SEGUE
         
     }
 
