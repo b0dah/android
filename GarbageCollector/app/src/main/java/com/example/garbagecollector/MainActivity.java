@@ -2,9 +2,25 @@ package com.example.garbagecollector;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -14,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayList <OrderDataModel> ordersList;
     private ListAdapter listAdapter;
 
+    private static ProgressDialog progressDialog;
+
+    private String url = "http://...:88888";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,16 +41,117 @@ public class MainActivity extends AppCompatActivity {
 
         ordersListView = findViewById(R.id.ordersListView);
 
-        ordersList = new ArrayList<>();
-        ordersList.add(new OrderDataModel("Vanusick", "Burgasskaaya, 21"));
-        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
+//        ordersList = new ArrayList<>();
+//        ordersList.add(new OrderDataModel("Vanusick", "Burgasskaaya, 21"));
+//        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
 
         setupListView();
     }
 
+
+    // Methods
     private void setupListView() {
+
+        removeSimpleProgressDialog();
 
         listAdapter = new OrdersListViewAdapter(this, ordersList);
         ordersListView.setAdapter(listAdapter);
+
+        
     }
+
+    private void retrieveJSON() {
+
+        showSimpleProgressDialog(this, "loading", "fetching JSON", true);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Response", ">>" + response);
+
+                        try {
+                            JSONObject json = new JSONObject(response);
+
+                            if (json.optString("Status").equals("true")) { // ???optionallllyyy????
+
+                                ordersList = new ArrayList<>();
+
+                                JSONArray jsonArray = json.getJSONArray("data");
+
+                                for (int i=0; i<jsonArray.length(); i++) {
+
+                                    OrderDataModel currentOrder = new OrderDataModel();
+                                    JSONObject currentJsonObject = jsonArray.getJSONObject(i);
+
+                                    currentOrder.setCustomerName(currentJsonObject.getString("name"));
+                                    currentOrder.setAdress(currentJsonObject.getString("address"));
+
+                                    ordersList.add(currentOrder);
+                                }
+
+                            setupListView();
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // displays error in Toast if occurrs
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        // add to request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private static void showSimpleProgressDialog(Context context, String title, String message, boolean isCancelable) {
+        try {
+            if (progressDialog == null) {
+                progressDialog = ProgressDialog.show(context, title, message);
+                progressDialog.setCancelable(isCancelable);
+            }
+            if (!progressDialog.isShowing()) {
+                progressDialog.show();
+            }
+        }
+        catch (IllegalArgumentException ie){
+            ie.printStackTrace();
+        }
+        catch (RuntimeException re) {
+            re.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void removeSimpleProgressDialog() {
+        try {
+            if (progressDialog == null) {
+                if (!progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        }
+        catch (IllegalArgumentException ie){
+            ie.printStackTrace();
+        }
+        catch (RuntimeException re) {
+            re.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 }
