@@ -67,8 +67,8 @@ public class OrdersListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.nameTextView.setText("Name : " + dataSet.get(i).customerName);
-        holder.addressTextView.setText("Adress : " + dataSet.get(i).adress);
+        holder.nameTextView.setText("Name : " + dataSet.get(i).getCustomerName());
+        holder.addressTextView.setText("Adress : " + dataSet.get(i).getAdress());
 
         return view;
     }

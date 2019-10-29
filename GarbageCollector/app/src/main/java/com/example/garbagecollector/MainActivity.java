@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //        ordersList.add(new OrderDataModel("Vanusick", "Burgasskaaya, 21"));
 //        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
 
-        setupListView();
+        retrieveJSON();
     }
 
 
@@ -58,7 +62,22 @@ public class MainActivity extends AppCompatActivity {
         ordersListView.setAdapter(listAdapter);
 
         // SEGUE
-        
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // getting listview click value into a OrderDataModel variable
+                OrderDataModel clickedOrder = ordersList.get(i);
+
+                Intent intent = new Intent(MainActivity.this, OrderDetailsActivity.class);
+
+                // Sending value to another activity
+
+                intent.putExtra("ClickedOrder", (Parcelable) clickedOrder); // parcelable ??
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void retrieveJSON() {
