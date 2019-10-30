@@ -1,6 +1,10 @@
 package com.example.garbagecollector;
 
-public class OrderDataModel {
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class OrderDataModel implements Serializable {
 
     private String customerName;
     private String adress;

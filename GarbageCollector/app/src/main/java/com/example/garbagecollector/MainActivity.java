@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -26,9 +27,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+//    View customLayout;
 
     private ListView ordersListView;
     ArrayList <OrderDataModel> ordersList;
@@ -36,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static ProgressDialog progressDialog;
 
-    private String url = "http://...:88888";
+    private String url = "http://212.192.144.106:7777";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +55,80 @@ public class MainActivity extends AppCompatActivity {
 //        ordersList.add(new OrderDataModel("Vanusick", "Burgasskaaya, 21"));
 //        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
 
-        retrieveJSON();
+//        customLayout = getLayoutInflater().inflate(R.layout.login_alert_layout, null);
+
+        retrieveJSONwithAuthentification();
     }
 
 
     // Methods
+    private void retrieveJSONwithAuthentification() {
+
+        //showSimpleProgressDialog(this, "loading", "fetching JSON", true);
+
+        final JSONObject requestBody = new JSONObject();
+
+        try {
+            requestBody.put("login", "huawei");
+            requestBody.put("password", "huawei");
+            requestBody.put("request_type", "authentication");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response", ">>" + response);
+
+                        try {
+                            JSONObject json = response; //new JSONObject(response);
+
+                            if (json.optString("status").equals("OK")) { // ???optionallllyyy????
+
+                                ordersList = new ArrayList<>();
+
+                                JSONArray jsonArray = json.getJSONArray("data");
+
+                                for (int i=0; i<jsonArray.length(); i++) {
+
+                                    OrderDataModel currentOrder = new OrderDataModel();
+                                    JSONObject currentJsonObject = jsonArray.getJSONObject(i);
+
+                                    currentOrder.setCustomerName(currentJsonObject.getString("name"));
+                                    currentOrder.setAdress(currentJsonObject.getString("origin_address"));
+
+                                    ordersList.add(currentOrder);
+                                }
+
+                                setupListView();
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // displays error in Toast if occurrs
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        // add to request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+
+
+
     private void setupListView() {
 
         removeSimpleProgressDialog();
@@ -73,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Sending value to another activity
 
-                intent.putExtra("ClickedOrder", (Parcelable) clickedOrder); // parcelable ??
+                intent.putExtra("ClickedOrder",  clickedOrder); // parcelable ??
 
                 startActivity(intent);
             }
@@ -155,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static void removeSimpleProgressDialog() {
         try {
-            if (progressDialog == null) {
+            if (progressDialog != null) {
                 if (!progressDialog.isShowing()) {
                     progressDialog.dismiss();
                     progressDialog = null;
@@ -173,5 +248,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void confireLoginAlert(){
+
+    }
 
 }
