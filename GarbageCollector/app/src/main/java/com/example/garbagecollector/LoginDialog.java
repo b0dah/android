@@ -37,7 +37,7 @@ public class LoginDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.login_alert_layout, null);
 
         builder.setView(view)
-                .setTitle("Login")
+                //.setTitle("Login")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
