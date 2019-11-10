@@ -30,9 +30,10 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
 //    View customLayout;
+
 
     private ListView ordersListView;
     ArrayList <OrderDataModel> ordersList;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 //        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
 
 //        customLayout = getLayoutInflater().inflate(R.layout.login_alert_layout, null);
+        showLoginDialog();
 
         retrieveJSONwithAuthentification();
     }
@@ -249,8 +251,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void confireLoginAlert(){
-
+    private void showLoginDialog(){
+        LoginDialog loginDialog = new LoginDialog();
+        loginDialog.show(getSupportFragmentManager(), "loginDialog");
     }
 
+
+    @Override
+    public void applyFilledFields(String username, String password, String socket) {
+        // use u, p and s
+        url = socket;
+    }
 }
