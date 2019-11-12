@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //        customLayout = getLayoutInflater().inflate(R.layout.login_alert_layout, null);
         showLoginDialog();
 
-        retrieveJSONwithAuthentification();
+        //retrieveJSONwithAuthentification();
     }
 
 
@@ -261,5 +261,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     public void applyFilledFields(String username, String password, String socket) {
         // use u, p and s
         url = socket;
+
+        retrieveJSONwithAuthentification();
     }
 }
