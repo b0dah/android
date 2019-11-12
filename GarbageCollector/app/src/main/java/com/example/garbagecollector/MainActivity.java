@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     OrderDataModel currentOrder = new OrderDataModel();
                                     JSONObject currentJsonObject = jsonArray.getJSONObject(i);
 
-                                    currentOrder.setCustomerName(currentJsonObject.getString("name"));
+                                    currentOrder.setCustomerName(currentJsonObject.getString("consumer_name"));
                                     currentOrder.setAdress(currentJsonObject.getString("origin_address"));
 
                                     ordersList.add(currentOrder);
