@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static ProgressDialog progressDialog;
 
-    private String url = "http://212.192.146.172:7777";
+    private String url = "http://172.20.10.7:7777";
 
 
 
