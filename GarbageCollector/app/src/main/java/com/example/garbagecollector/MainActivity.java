@@ -157,58 +157,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         });
     }
 
-    private void retrieveJSON() {
-
-        showSimpleProgressDialog(this, "loading", "fetching JSON", true);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Response", ">>" + response);
-
-                        try {
-                            JSONObject json = new JSONObject(response);
-
-                            if (json.optString("Status").equals("true")) { // ???optionallllyyy????
-
-                                ordersList = new ArrayList<>();
-
-                                JSONArray jsonArray = json.getJSONArray("data");
-
-                                for (int i=0; i<jsonArray.length(); i++) {
-
-                                    OrderDataModel currentOrder = new OrderDataModel();
-                                    JSONObject currentJsonObject = jsonArray.getJSONObject(i);
-
-                                    currentOrder.setCustomerName(currentJsonObject.getString("name"));
-                                    currentOrder.setAdress(currentJsonObject.getString("address"));
-
-                                    ordersList.add(currentOrder);
-                                }
-
-                            setupListView();
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // displays error in Toast if occurrs
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        // add to request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
     private static void showSimpleProgressDialog(Context context, String title, String message, boolean isCancelable) {
         try {
             if (progressDialog == null) {
