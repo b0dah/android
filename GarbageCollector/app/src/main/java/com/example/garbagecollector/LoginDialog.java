@@ -16,6 +16,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.android.volley.toolbox.StringRequest;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class LoginDialog extends AppCompatDialogFragment {
 
     private EditText usernameEditText;
@@ -56,11 +62,16 @@ public class LoginDialog extends AppCompatDialogFragment {
                     }
                 });
 
+        // fetch from file
+        String loginDetails/*[]*/ = FileHolder.fetchLoginDataFromFile(getContext());
+
         // Assign vars to EditTexts
         usernameEditText = view.findViewById(R.id.username);
         passwordEditText = view.findViewById(R.id.password);
         socketEditText = view.findViewById(R.id.socket);
-        socketEditText.setText("http://");
+
+        // set fetched text
+        socketEditText.setText(loginDetails);
 
         return builder.create();
     }
@@ -79,4 +90,6 @@ public class LoginDialog extends AppCompatDialogFragment {
     public interface LoginDialogListener {
         void applyFilledFields(String username, String password, String socket);
     }
+
+
 }

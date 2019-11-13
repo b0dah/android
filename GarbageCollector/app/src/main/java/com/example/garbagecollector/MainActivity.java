@@ -27,6 +27,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -211,5 +215,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         url = socket;
 
         retrieveJSONwithAuthentification();
+
+        FileHolder.writeLoginDataToFile(username, password, socket, this);
     }
+
+
 }
