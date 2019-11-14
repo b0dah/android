@@ -30,6 +30,10 @@ public class LoginDialog extends AppCompatDialogFragment {
 
     private LoginDialogListener listener;
 
+    public LoginDialog() {
+
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -62,8 +66,11 @@ public class LoginDialog extends AppCompatDialogFragment {
                     }
                 });
 
+        // TODO Disable OK button whilst not all the fields filled
+
+
         // fetch from file
-        String loginDetails/*[]*/ = FileHolder.fetchLoginDataFromFile(getContext());
+        String loginDetails[] = FileHolder.fetchLoginDataFromFile(getContext());
 
         // Assign vars to EditTexts
         usernameEditText = view.findViewById(R.id.username);
@@ -71,7 +78,9 @@ public class LoginDialog extends AppCompatDialogFragment {
         socketEditText = view.findViewById(R.id.socket);
 
         // set fetched text
-        socketEditText.setText(loginDetails);
+        usernameEditText.setText(loginDetails[0]);
+        passwordEditText.setText(loginDetails[1]);
+        socketEditText.setText(loginDetails[2]);
 
         return builder.create();
     }

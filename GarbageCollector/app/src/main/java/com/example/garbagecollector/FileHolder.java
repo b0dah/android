@@ -17,13 +17,16 @@ import static android.content.Context.MODE_PRIVATE;
 public class FileHolder {
 
     static void writeLoginDataToFile(String username, String password, String socket, Context context) {
+
+        String stringToWrite = username + "\n" + password + "\n" + socket;
+
         try {
 
             FileOutputStream fileHolder = context.openFileOutput("LoginDetails.txt", MODE_PRIVATE);
-            fileHolder.write(socket.getBytes());
+            fileHolder.write(stringToWrite.getBytes());
             fileHolder.close();
 
-            //Toast.makeText(context, "Text saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Text saved", Toast.LENGTH_LONG).show();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -32,9 +35,10 @@ public class FileHolder {
         }
     }
 
-    static String fetchLoginDataFromFile(Context context) {
+    static String[] fetchLoginDataFromFile(Context context) {
 
-        StringBuffer stringBuffer = new StringBuffer();
+        String result[] = new String[3];
+        //StringBuffer stringBuffer = new StringBuffer();
 
         try {
             FileInputStream fileHolder = context.openFileInput("LoginDetails.txt");
@@ -43,8 +47,11 @@ public class FileHolder {
 
             String line;
 
+            int i = 0;
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuffer.append(line);
+                //stringBuffer.append(line);
+                result[i] = line.toString();
+                i++;
             }
 
         } catch (FileNotFoundException e) {
@@ -53,6 +60,7 @@ public class FileHolder {
             e.printStackTrace();
         }
 
-        return stringBuffer.toString();
+        //return stringBuffer.toString();
+        return result;
     }
 }

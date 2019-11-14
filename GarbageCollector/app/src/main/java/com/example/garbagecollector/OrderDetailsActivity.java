@@ -27,7 +27,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         OrderDataModel receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
 
         nameTextView.setText(receivedOrder.getCustomerName());
-        addressTextView.setText(receivedOrder.getAdress());
+        addressTextView.setText(receivedOrder.getOriginAdress());
 
     }
 }

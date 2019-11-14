@@ -68,7 +68,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
         }
 
         holder.nameTextView.setText("Заказчик : " + dataSet.get(i).getCustomerName());
-        holder.addressTextView.setText("Адрес : " + dataSet.get(i).getAdress());
+        holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
 
         return view;
     }

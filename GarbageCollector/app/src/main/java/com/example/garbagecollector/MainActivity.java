@@ -2,6 +2,7 @@ package com.example.garbagecollector;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -104,8 +105,16 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     OrderDataModel currentOrder = new OrderDataModel();
                                     JSONObject currentJsonObject = jsonArray.getJSONObject(i);
 
+                                    currentOrder.setId(currentJsonObject.getInt("id"));
                                     currentOrder.setCustomerName(currentJsonObject.getString("customer_name"));
-                                    currentOrder.setAdress(currentJsonObject.getString("origin_address"));
+                                    currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
+                                    currentOrder.setDestinantionAddress(currentJsonObject.getString("destination_address"));
+                                    currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
+                                    currentOrder.setDeliveryTime(currentJsonObject.getString("delivery_time"));
+                                    currentOrder.setPayment(currentJsonObject.getInt("payment"));
+                                    currentOrder.setStatus(currentJsonObject.getInt("status"));
+                                    currentOrder.setNumberOfMovers(currentJsonObject.getInt("number_of_movers"));
+                                    currentOrder.setPhoneNumber(currentJsonObject.getString("customer_phone_number"));
 
                                     ordersList.add(currentOrder);
                                 }
@@ -206,6 +215,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private void showLoginDialog(){
         LoginDialog loginDialog = new LoginDialog();
         loginDialog.show(getSupportFragmentManager(), "loginDialog");
+
+        // Disable OK button whilst not all the fields filled
+        //((LoginDialog)loginDialog).get
     }
 
 
