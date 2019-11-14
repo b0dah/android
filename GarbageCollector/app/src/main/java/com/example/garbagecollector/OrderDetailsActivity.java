@@ -10,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    TextView nameTextView, addressTextView;
+    TextView nameTextView, originAddressTextView, destinationAddressTextView, deliveryTimeTextView,
+    paymentTextView, numberOfMoversTextView, phoneNumberTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,15 +20,29 @@ public class OrderDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.order_details_activity);
 
         nameTextView = (TextView) findViewById(R.id.name);
-        addressTextView = (TextView) findViewById(R.id.address);
+        originAddressTextView = (TextView) findViewById(R.id.origin_address);
+        destinationAddressTextView = (TextView) findViewById(R.id.destination_address);
+        deliveryTimeTextView = (TextView) findViewById(R.id.delivery_time);
+        paymentTextView = (TextView) findViewById(R.id.payment);
+        numberOfMoversTextView = (TextView) findViewById(R.id.number_of_movers);
+        phoneNumberTextView = (TextView) findViewById(R.id.phone_number);
+
 
         // Receiving Value into activity using intent
         //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
         OrderDataModel receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
 
-        nameTextView.setText(receivedOrder.getCustomerName());
-        addressTextView.setText(receivedOrder.getOriginAdress());
 
+
+        nameTextView.setText(receivedOrder.getCustomerName());
+        originAddressTextView.setText(receivedOrder.getOriginAdress());
+        destinationAddressTextView.setText(receivedOrder.getDestinantionAddress());
+        deliveryTimeTextView.setText(receivedOrder.getDeliveryTime());
+        paymentTextView.setText(String.valueOf(receivedOrder.getPayment()));
+        numberOfMoversTextView.setText(String.valueOf(receivedOrder.getNumberOfMovers()));
+        phoneNumberTextView.setText(receivedOrder.getPhoneNumber());
+
+        // Return New Status To Previous Activity
     }
 }

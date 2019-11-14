@@ -21,12 +21,48 @@
 
 
         <TextView
+            android:id="@+id/origin_address"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
 
-            android:text="Имя"
+            android:text="or address"
+            android:textSize="18dp"
+            />
+
+        <TextView
+            android:id="@+id/destination_address"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+
+            android:text="dest address"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/delivery_time"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+
+            android:text="time"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/number_of_movers"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+
+            android:text="movers"
             android:textSize="18dp" />
 
         <TextView
@@ -37,31 +73,32 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
 
-            android:text="-----"
+            android:text="name"
             android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
 
-            android:text="Адрес"
-            android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/phone_number"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
 
-            android:text="0000000"
-            android:textSize="18dp"
+            android:text="phone"
+            android:textSize="18dp" />
 
-            android:lines="0"/>
+        <TextView
+            android:id="@+id/payment"
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+
+            android:text="payment"
+            android:textSize="18dp" />
 
     </LinearLayout>
 
