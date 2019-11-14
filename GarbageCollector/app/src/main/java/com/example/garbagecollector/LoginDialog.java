@@ -30,10 +30,6 @@ public class LoginDialog extends AppCompatDialogFragment {
 
     private LoginDialogListener listener;
 
-    public LoginDialog() {
-
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
