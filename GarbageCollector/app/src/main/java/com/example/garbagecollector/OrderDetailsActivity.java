@@ -21,6 +21,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     paymentTextView, numberOfMoversTextView, phoneNumberTextView;
     Button changeStatusButton;
 
+    OrderDataModel receivedOrder;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         // Receiving Value into activity using intent
         //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
-        OrderDataModel receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
+        receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
 
         // Dislaying Info in TextViews
         nameTextView.setText(receivedOrder.getCustomerName());
@@ -58,75 +60,52 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 // Style for button
                 changeStatusButton.setText("Начать исполнение");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-
-                // Changing status local instance status
-
-
-
-                // Changing status on the server
-
-
-
                 break;
 
             case SEEN:
                 // Style for button
                 changeStatusButton.setText("Начать исполнение");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-
-                // Changing status local instance status
-                receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 1);
-
-                //changeStatusButton.refreshDrawableState();
-
-                // Changing status on the server
-
                 break;
 
             case STARTED:
                 // Style for button
                 changeStatusButton.setText("На месте!");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-
-                // Changing status local instance status
-                receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 1);
-                //changeStatusButton.refreshDrawableState();
-
-                // Changing status on the server
-
                 break;
 
             case ARRIVED:
                 // Style for button
                 changeStatusButton.setText("Завршить заказ");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-
-                // Changing status local instance status
-                receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 1);
-                //changeStatusButton.refreshDrawableState();
-
-                // Changing status on the server
-
                 break;
 
             case DONE:
                 // Style for button
                 changeStatusButton.setVisibility(View.GONE);
-//                changeStatusButton.refreshDrawableState();
-
                 break;
+
             default:
                 Toast.makeText(this,"WRONG_STATUS", Toast.LENGTH_LONG);
         }
     }
 
-    void didChangeStatusButtonClick(View view) {
+    public void didChangeStatusButtonClick(View view) {
 
-        // Changing status local instance status
-        receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 1);
+        // Changing local instance status
+        if (receivedOrder != null) {
+
+            int num = receivedOrder.getStatus().ordinal();
+            System.out.println("--->"+num);
+
+            receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 3);
+            //receivedOrder.setStatus(3);
+        }
 
         //changeStatusButton.refreshDrawableState();
+        //this.recreate();
 
         // Changing status on the server
+        // POST-request
     }
 }
