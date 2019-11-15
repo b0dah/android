@@ -162,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 Intent intent = new Intent(MainActivity.this, OrderDetailsActivity.class);
 
                 // Sending value to another activity
-
                 intent.putExtra("ClickedOrder",  clickedOrder); // parcelable ??
 
                 startActivity(intent);

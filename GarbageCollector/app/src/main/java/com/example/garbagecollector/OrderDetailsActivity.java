@@ -40,8 +40,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         changeStatusButton = (Button) findViewById(R.id.change_status_button);
 
-        // Receiving Value into activity using intent
-        //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
+        //MARK: Receiving Value into activity using intent   //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
         receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
 
@@ -99,7 +98,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
             System.out.println("--->"+num);
 
             receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 3);
-            //receivedOrder.setStatus(3);
         }
 
         //changeStatusButton.refreshDrawableState();
