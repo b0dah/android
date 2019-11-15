@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     public static final String ORDER_ID_RESPONSE = "RESPONSE_WITH_ORDER_ID";
     public final static String NEW_STATUS_ID_RESPONSE = "RESPONSE_WITH_NEW_STATUS_ID";
     public final static String CLICKED_ORDER_EXTRA = "ClickedOrder";
+    public final static String SERVER_URL_EXTRA = "SERVER_URL_EXTRA";
 
 
     private ListView ordersListView;
@@ -92,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
             requestBody.put("login", username);
             requestBody.put("password", password);
             requestBody.put("request_type", "authentication");
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -172,12 +172,11 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // getting listview click value into a OrderDataModel variable
                 OrderDataModel clickedOrder = ordersList.get(i);
-
                 Intent intent = new Intent(MainActivity.this, OrderDetailsActivity.class);
 
-                System.out.println("        SENDING INSTANCE TO NEXT ACTIVIVTY (" + clickedOrder.getStatus());
                 // Sending value to another activity
                 intent.putExtra(CLICKED_ORDER_EXTRA,  clickedOrder); // parcelable ??
+                intent.putExtra(SERVER_URL_EXTRA, url);
 
                 //startActivity(intent);
                 startActivityForResult(intent, REQUEST_CODE_FOR_ORDER);
@@ -242,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         this.username = username;
         this.password = password;
         this.url = socket;
-
 
         retrieveJSONwithAuthentification();
 

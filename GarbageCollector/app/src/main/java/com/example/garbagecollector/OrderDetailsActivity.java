@@ -7,12 +7,23 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.xml.datatype.Duration;
 
@@ -22,7 +33,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     paymentTextView, numberOfMoversTextView, phoneNumberTextView, doneStatusTextView;
     Button changeStatusButton;
 
-    OrderDataModel receivedOrder;
+    private OrderDataModel receivedOrder;
+    private String serverUrl;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,6 +59,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         //MARK: Receiving Value into activity using intent   //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
         receivedOrder = (OrderDataModel) intent.getExtras().getSerializable(MainActivity.CLICKED_ORDER_EXTRA);
+        serverUrl = (String) intent.getStringExtra(MainActivity.SERVER_URL_EXTRA);
+
 
         //Dislaying Info in TextViews
         nameTextView.setText("\uD83D\uDC64 Заказчик:  " + receivedOrder.getCustomerName());
@@ -54,7 +68,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         destinationAddressTextView.setText("\uD83C\uDFC1 Куда:  " + receivedOrder.getDestinantionAddress());
         deliveryTimeTextView.setText("\uD83D\uDD50 Ко времени:  " + receivedOrder.getDeliveryTime());
         paymentTextView.setText("\uD83D\uDCB8 Сумма к оплате:  " + String.valueOf(Double.valueOf(receivedOrder.getPayment())) + "₱");
-        numberOfMoversTextView.setText("‍️\uD83E\uDD84 ️Грузчиков:  " + String.valueOf(receivedOrder.getNumberOfMovers()));
+        numberOfMoversTextView.setText("‍️\uD83E\uDD84 ️Грузчиков(\uD83E\uDD2C):  " + String.valueOf(receivedOrder.getNumberOfMovers()));
         phoneNumberTextView.setText("\uD83D\uDCF1 Номер телефона заказчика:  " + receivedOrder.getPhoneNumber());
 
         redrawInterface();
@@ -67,7 +81,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             // Changing local copy
             int num = receivedOrder.getStatus().ordinal();
-            System.out.println("--->"+num);
             int statusId = receivedOrder.getStatus().ordinal() + 2; // 2 is server shift
             receivedOrder.setStatus(statusId+1);
 
@@ -81,6 +94,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             redrawInterface();
 
             // TODO Changing status on the server (POST-request)
+            changeOrderStatusOnServer(serverUrl, receivedOrder.getId(), statusId+1);
         }
 
 
@@ -124,7 +138,41 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 break;
 
             default:
-                Toast.makeText(this,"WRONG_STATUS", Toast.LENGTH_LONG);
+                Toast.makeText(this,"WRONG_STATUS", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void changeOrderStatusOnServer(String url, int orderId, int newStatusId) {
+
+        final JSONObject requestBody = new JSONObject();
+
+        try {
+            requestBody.put("request_type", "change_status");
+            requestBody.put("order_id", orderId);
+            requestBody.put("new_status", newStatusId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    if (!response.optString("status").equals("OK")) {
+                        Toast.makeText(getApplicationContext(), "Server haven't accepted status ID!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            },
+
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+        // add to request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
     }
 }
