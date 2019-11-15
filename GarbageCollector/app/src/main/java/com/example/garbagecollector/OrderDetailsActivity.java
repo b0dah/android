@@ -53,17 +53,21 @@ public class OrderDetailsActivity extends AppCompatActivity {
         numberOfMoversTextView.setText(String.valueOf(receivedOrder.getNumberOfMovers()));
         phoneNumberTextView.setText(receivedOrder.getPhoneNumber());
 
-        // Return New Status To Previous Activity
+        System.out.println("    IN ONCREATE");
+
         switch (receivedOrder.getStatus()) {
             case DEFAULT:
                 // Style for button
                 changeStatusButton.setText("Начать исполнение");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+
+                // TODO: change status to SEEN
+
                 break;
 
             case SEEN:
                 // Style for button
-                changeStatusButton.setText("Начать исполнение");
+                changeStatusButton.setText("Начать исполнение (п)");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
                 break;
 
@@ -98,12 +102,63 @@ public class OrderDetailsActivity extends AppCompatActivity {
             System.out.println("--->"+num);
 
             receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 3);
+            redrawInterface();
+
+
+            // --> ()
+            Intent intent = new Intent();
+            intent.putExtra("RESPONSE_WITH_ORDER_ID", receivedOrder.getId());
+            setResult(RESULT_OK, intent);
+
+
+
+            //changeStatusButton.refreshDrawableState();
+            //finish();
+            //this.recreate();
+
         }
 
-        //changeStatusButton.refreshDrawableState();
-        //this.recreate();
 
-        // Changing status on the server
-        // POST-request
+
+        // Changing status on the server (POST-request)
+    }
+
+    private void redrawInterface(){
+        switch (receivedOrder.getStatus()) {
+            case DEFAULT:
+                // Style for button
+                changeStatusButton.setText("Начать исполнение");
+                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+
+                // TODO: change status to SEEN
+
+                break;
+
+            case SEEN:
+                // Style for button
+                changeStatusButton.setText("Начать исполнение (п)");
+                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                break;
+
+            case STARTED:
+                // Style for button
+                changeStatusButton.setText("На месте!");
+                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                break;
+
+            case ARRIVED:
+                // Style for button
+                changeStatusButton.setText("Завршить заказ");
+                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                break;
+
+            case DONE:
+                // Style for button
+                changeStatusButton.setVisibility(View.GONE);
+                break;
+
+            default:
+                Toast.makeText(this,"WRONG_STATUS", Toast.LENGTH_LONG);
+        }
     }
 }

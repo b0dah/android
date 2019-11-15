@@ -1,5 +1,6 @@
 package com.example.garbagecollector;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -39,16 +40,15 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
 //    View customLayout;
 
-
     private ListView ordersListView;
-    ArrayList <OrderDataModel> ordersList;
+    private ArrayList <OrderDataModel> ordersList;
     private ListAdapter listAdapter;
 
     private static ProgressDialog progressDialog;
 
     private String url = "http://172.20.10.7:7777";
 
-
+    public int ii(){return 5;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +63,22 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
 //        customLayout = getLayoutInflater().inflate(R.layout.login_alert_layout, null);
         showLoginDialog();
-
-        //retrieveJSONwithAuthentification();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((resultCode == RESULT_OK) && (requestCode == 1)) {
+
+            for (OrderDataModel order : ordersList ) {
+                if (order.getId() == data.getIntExtra("RESPONSE_WITH_ORDER_ID", 0)) {
+                    order.setStatus(order.getStatus().ordinal() + 3);
+                    System.out.println("        STATUS CHANGED! ");
+                    System.out.println(order.getStatus());
+                }
+            }
+        }
+    }
 
     // Methods
     private void retrieveJSONwithAuthentification() {
@@ -161,10 +173,12 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
                 Intent intent = new Intent(MainActivity.this, OrderDetailsActivity.class);
 
+                System.out.println("        SENDING INSTANCE TO NEXT ACTIVIVTY (" + clickedOrder.getStatus());
                 // Sending value to another activity
                 intent.putExtra("ClickedOrder",  clickedOrder); // parcelable ??
 
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
     }
