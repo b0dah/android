@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
-//    View customLayout;
+    //final
 
     private ListView ordersListView;
     private ArrayList <OrderDataModel> ordersList;
@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private static ProgressDialog progressDialog;
 
     private String url = "http://172.20.10.7:7777";
-
-    public int ii(){return 5;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +68,14 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         super.onActivityResult(requestCode, resultCode, data);
         if ((resultCode == RESULT_OK) && (requestCode == 1)) {
 
+            int orderToChangeId = data.getIntExtra("RESPONSE_WITH_ORDER_ID", 0);
+            int newStatusID = data.getIntExtra("RESPONSE_WITH_NEW_STATUS_ID", 0);
+
             for (OrderDataModel order : ordersList ) {
-                if (order.getId() == data.getIntExtra("RESPONSE_WITH_ORDER_ID", 0)) {
-                    order.setStatus(order.getStatus().ordinal() + 3);
+                if (order.getId() == orderToChangeId) {
+
+                    order.setStatus(newStatusID);
+
                     System.out.println("        STATUS CHANGED! ");
                     System.out.println(order.getStatus());
                 }

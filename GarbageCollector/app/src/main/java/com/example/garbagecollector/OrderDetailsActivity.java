@@ -95,32 +95,30 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     public void didChangeStatusButtonClick(View view) {
 
-        // Changing local instance status
+        // MARK: Changing local instance status and redrawing interface
         if (receivedOrder != null) {
 
+            // Changing local copy
             int num = receivedOrder.getStatus().ordinal();
             System.out.println("--->"+num);
+            int statusId = receivedOrder.getStatus().ordinal() + 2; // 2 is server shift
+            receivedOrder.setStatus(statusId+1);
 
-            receivedOrder.setStatus(receivedOrder.getStatus().ordinal() + 3);
-            redrawInterface();
-
-
-            // --> ()
+            // Returning result to MainActivity ( <-- )
             Intent intent = new Intent();
             intent.putExtra("RESPONSE_WITH_ORDER_ID", receivedOrder.getId());
+            intent.putExtra("RESPONSE_WITH_NEW_STATUS_ID", statusId + 1);
             setResult(RESULT_OK, intent);
 
+            // updateUI
+            redrawInterface();
 
-
-            //changeStatusButton.refreshDrawableState();
-            //finish();
-            //this.recreate();
-
+            // Changing status on the server (POST-request)
         }
 
 
 
-        // Changing status on the server (POST-request)
+
     }
 
     private void redrawInterface(){
