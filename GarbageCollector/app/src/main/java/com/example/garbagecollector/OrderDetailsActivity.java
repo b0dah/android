@@ -1,5 +1,6 @@
 package com.example.garbagecollector;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     OrderDataModel receivedOrder;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +48,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
 
-        // Dislaying Info in TextViews
-        nameTextView.setText(receivedOrder.getCustomerName());
-        originAddressTextView.setText(receivedOrder.getOriginAdress());
-        destinationAddressTextView.setText(receivedOrder.getDestinantionAddress());
-        deliveryTimeTextView.setText(receivedOrder.getDeliveryTime());
-        paymentTextView.setText(String.valueOf(receivedOrder.getPayment()));
-        numberOfMoversTextView.setText(String.valueOf(receivedOrder.getNumberOfMovers()));
-        phoneNumberTextView.setText(receivedOrder.getPhoneNumber());
-
-                System.out.println("    IN ONCREATE");
+        //Dislaying Info in TextViews
+        nameTextView.setText("\uD83D\uDC64 Заказчик:  " + receivedOrder.getCustomerName());
+        originAddressTextView.setText("\uD83D\uDCCC Откуда:  " + receivedOrder.getOriginAdress());
+        destinationAddressTextView.setText("\uD83C\uDFC1 Куда:  " + receivedOrder.getDestinantionAddress());
+        deliveryTimeTextView.setText("\uD83D\uDD50 Ко времени:  " + receivedOrder.getDeliveryTime());
+        paymentTextView.setText("\uD83D\uDCB8 Сумма к оплате:  " + String.valueOf(Double.valueOf(receivedOrder.getPayment())) + "₱");
+        numberOfMoversTextView.setText("‍️\uD83E\uDD84 ️Грузчиков:  " + String.valueOf(receivedOrder.getNumberOfMovers()));
+        phoneNumberTextView.setText("\uD83D\uDCF1 Номер телефона заказчика:  " + receivedOrder.getPhoneNumber());
 
         redrawInterface();
     }
