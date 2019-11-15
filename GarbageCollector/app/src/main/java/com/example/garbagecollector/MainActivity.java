@@ -38,7 +38,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
-    //final
+    final int REQUEST_CODE_FOR_ORDER = 1;
+    public static final String ORDER_ID_RESPONSE = "RESPONSE_WITH_ORDER_ID";
+    public final static String NEW_STATUS_ID_RESPONSE = "RESPONSE_WITH_NEW_STATUS_ID";
+
+
 
     private ListView ordersListView;
     private ArrayList <OrderDataModel> ordersList;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     private static ProgressDialog progressDialog;
 
-    private String url = "http://172.20.10.7:7777";
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,30 +58,24 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         setContentView(R.layout.activity_main);
 
         ordersListView = findViewById(R.id.ordersListView);
-
-//        ordersList = new ArrayList<>();
-//        ordersList.add(new OrderDataModel("Vanusick", "Burgasskaaya, 21"));
-//        ordersList.add(new OrderDataModel("Danusick", "Kalinovaya, 305"));
-
-//        customLayout = getLayoutInflater().inflate(R.layout.login_alert_layout, null);
         showLoginDialog();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((resultCode == RESULT_OK) && (requestCode == 1)) {
+        if ((resultCode == RESULT_OK) && (requestCode == REQUEST_CODE_FOR_ORDER)) {
 
-            int orderToChangeId = data.getIntExtra("RESPONSE_WITH_ORDER_ID", 0);
-            int newStatusID = data.getIntExtra("RESPONSE_WITH_NEW_STATUS_ID", 0);
+            int orderToChangeId = data.getIntExtra(ORDER_ID_RESPONSE, 0);
+            int newStatusID = data.getIntExtra(NEW_STATUS_ID_RESPONSE, 0);
 
             for (OrderDataModel order : ordersList ) {
                 if (order.getId() == orderToChangeId) {
 
                     order.setStatus(newStatusID);
 
-                    System.out.println("        STATUS CHANGED! ");
-                    System.out.println(order.getStatus());
+                        System.out.println("        STATUS CHANGED! ");
+                        System.out.println(order.getStatus());
                 }
             }
         }
@@ -181,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 intent.putExtra("ClickedOrder",  clickedOrder); // parcelable ??
 
                 //startActivity(intent);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, REQUEST_CODE_FOR_ORDER);
             }
         });
     }

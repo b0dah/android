@@ -18,7 +18,7 @@ import javax.xml.datatype.Duration;
 public class OrderDetailsActivity extends AppCompatActivity {
 
     TextView nameTextView, originAddressTextView, destinationAddressTextView, deliveryTimeTextView,
-    paymentTextView, numberOfMoversTextView, phoneNumberTextView;
+    paymentTextView, numberOfMoversTextView, phoneNumberTextView, doneStatusTextView;
     Button changeStatusButton;
 
     OrderDataModel receivedOrder;
@@ -39,6 +39,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         phoneNumberTextView = (TextView) findViewById(R.id.phone_number);
 
         changeStatusButton = (Button) findViewById(R.id.change_status_button);
+        doneStatusTextView = (TextView) findViewById(R.id.done_status);
+
 
         //MARK: Receiving Value into activity using intent   //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
@@ -53,44 +55,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
         numberOfMoversTextView.setText(String.valueOf(receivedOrder.getNumberOfMovers()));
         phoneNumberTextView.setText(receivedOrder.getPhoneNumber());
 
-        System.out.println("    IN ONCREATE");
+                System.out.println("    IN ONCREATE");
 
-        switch (receivedOrder.getStatus()) {
-            case DEFAULT:
-                // Style for button
-                changeStatusButton.setText("Начать исполнение");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-
-                // TODO: change status to SEEN
-
-                break;
-
-            case SEEN:
-                // Style for button
-                changeStatusButton.setText("Начать исполнение (п)");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-                break;
-
-            case STARTED:
-                // Style for button
-                changeStatusButton.setText("На месте!");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-                break;
-
-            case ARRIVED:
-                // Style for button
-                changeStatusButton.setText("Завршить заказ");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
-                break;
-
-            case DONE:
-                // Style for button
-                changeStatusButton.setVisibility(View.GONE);
-                break;
-
-            default:
-                Toast.makeText(this,"WRONG_STATUS", Toast.LENGTH_LONG);
-        }
+        redrawInterface();
     }
 
     public void didChangeStatusButtonClick(View view) {
@@ -106,14 +73,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             // Returning result to MainActivity ( <-- )
             Intent intent = new Intent();
-            intent.putExtra("RESPONSE_WITH_ORDER_ID", receivedOrder.getId());
-            intent.putExtra("RESPONSE_WITH_NEW_STATUS_ID", statusId + 1);
+            intent.putExtra(MainActivity.ORDER_ID_RESPONSE, receivedOrder.getId());
+            intent.putExtra(MainActivity.NEW_STATUS_ID_RESPONSE, statusId + 1);
             setResult(RESULT_OK, intent);
 
             // updateUI
             redrawInterface();
 
-            // Changing status on the server (POST-request)
+            // TODO Changing status on the server (POST-request)
         }
 
 
@@ -141,18 +108,19 @@ public class OrderDetailsActivity extends AppCompatActivity {
             case STARTED:
                 // Style for button
                 changeStatusButton.setText("На месте!");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                changeStatusButton.setBackgroundColor(Color.rgb(255, 255, 102));
                 break;
 
             case ARRIVED:
                 // Style for button
-                changeStatusButton.setText("Завршить заказ");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                changeStatusButton.setText("Завершить заказ");
+                changeStatusButton.setBackgroundColor(Color.rgb(72, 219, 136));
                 break;
 
             case DONE:
                 // Style for button
                 changeStatusButton.setVisibility(View.GONE);
+                doneStatusTextView.setVisibility(View.VISIBLE);
                 break;
 
             default:
