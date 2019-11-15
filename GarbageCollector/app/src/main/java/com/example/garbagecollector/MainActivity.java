@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     final int REQUEST_CODE_FOR_ORDER = 1;
     public static final String ORDER_ID_RESPONSE = "RESPONSE_WITH_ORDER_ID";
     public final static String NEW_STATUS_ID_RESPONSE = "RESPONSE_WITH_NEW_STATUS_ID";
-
+    public final static String CLICKED_ORDER_EXTRA = "ClickedOrder";
 
 
     private ListView ordersListView;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     private static ProgressDialog progressDialog;
 
-    private String url;
+    private String username, password, url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         final JSONObject requestBody = new JSONObject();
 
         try {
-            requestBody.put("login", "huawei");
-            requestBody.put("password", "huawei");
+            requestBody.put("login", username);
+            requestBody.put("password", password);
             requestBody.put("request_type", "authentication");
         }
         catch (JSONException e) {
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                 setupListView();
 
                             }
+                            else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
                 System.out.println("        SENDING INSTANCE TO NEXT ACTIVIVTY (" + clickedOrder.getStatus());
                 // Sending value to another activity
-                intent.putExtra("ClickedOrder",  clickedOrder); // parcelable ??
+                intent.putExtra(CLICKED_ORDER_EXTRA,  clickedOrder); // parcelable ??
 
                 //startActivity(intent);
                 startActivityForResult(intent, REQUEST_CODE_FOR_ORDER);
@@ -238,7 +239,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     @Override
     public void applyFilledFields(String username, String password, String socket) {
         // use u, p and s
-        url = socket;
+        this.username = username;
+        this.password = password;
+        this.url = socket;
+
 
         retrieveJSONwithAuthentification();
 

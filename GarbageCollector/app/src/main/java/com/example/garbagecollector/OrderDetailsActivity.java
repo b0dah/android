@@ -46,7 +46,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         //MARK: Receiving Value into activity using intent   //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
         Intent intent = getIntent();
-        receivedOrder = (OrderDataModel) intent.getExtras().getSerializable("ClickedOrder");
+        receivedOrder = (OrderDataModel) intent.getExtras().getSerializable(MainActivity.CLICKED_ORDER_EXTRA);
 
         //Dislaying Info in TextViews
         nameTextView.setText("\uD83D\uDC64 Заказчик:  " + receivedOrder.getCustomerName());
