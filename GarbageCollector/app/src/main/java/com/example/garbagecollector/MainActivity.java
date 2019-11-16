@@ -1,55 +1,49 @@
 package com.example.garbagecollector;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
+    // DEFINE section
     final int REQUEST_CODE_FOR_ORDER = 1;
     public static final String ORDER_ID_RESPONSE = "RESPONSE_WITH_ORDER_ID";
     public final static String NEW_STATUS_ID_RESPONSE = "RESPONSE_WITH_NEW_STATUS_ID";
     public final static String CLICKED_ORDER_EXTRA = "ClickedOrder";
     public final static String SERVER_URL_EXTRA = "SERVER_URL_EXTRA";
 
-
+    //Fields
     private ListView ordersListView;
     private ArrayList <OrderDataModel> ordersList;
     private ListAdapter listAdapter;
 
     private static ProgressDialog progressDialog;
+    SwipeRefreshLayout swipeToRefreshWidget;
 
     private String username, password, url;
 
@@ -59,6 +53,20 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         setContentView(R.layout.activity_main);
 
         ordersListView = findViewById(R.id.ordersListView);
+
+        //Configuring Swipe to refresh
+//        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
+//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//                //retrieveOrdersWithKeyword();
+//                ArrayList<OrderDataModel> a = new ArrayList<>();
+//                updateOrdersList(a);
+//                swipeToRefreshWidget.setRefreshing(false);
+//            }
+//        });
+
         showLoginDialog();
     }
 
@@ -178,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 intent.putExtra(CLICKED_ORDER_EXTRA,  clickedOrder); // parcelable ??
                 intent.putExtra(SERVER_URL_EXTRA, url);
 
-                //startActivity(intent);
                 startActivityForResult(intent, REQUEST_CODE_FOR_ORDER);
             }
         });
@@ -246,6 +253,5 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         FileHolder.writeLoginDataToFile(username, password, socket, this);
     }
-
 
 }

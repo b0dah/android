@@ -8,12 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 public class OrdersListViewAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList <OrderDataModel> dataSet;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public OrdersListViewAdapter(Context context, ArrayList dataSet) {
         this.context = context;
@@ -70,10 +75,37 @@ public class OrdersListViewAdapter extends BaseAdapter {
         holder.nameTextView.setText("Заказчик : " + dataSet.get(i).getCustomerName());
         holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
 
+        //REFRESH
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshUI();
+            }
+        });
+
         return view;
     }
+
+    // LEGACY //Rewrite new fetched data and update ListView
+    public void updateOrdersList(ArrayList<OrderDataModel> newList) {
+
+    }
+
+    private void refreshUI(){
+//        dataSet.clear();
+////        dataSet.addAll(newList);
+        // TODO request here
+        HtttpRequester.request();
+
+
+        this.notifyDataSetChanged();
+    }
+
+
 
     private class ViewHolder {
         protected TextView nameTextView, addressTextView;
     }
+
+
 }

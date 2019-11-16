@@ -7,14 +7,18 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefreshWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ordersListView"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp" />
 
-
-    </ListView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
