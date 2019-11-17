@@ -20,12 +20,17 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList <OrderDataModel> dataSet;
+    private String url, keyword, driverId;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    public OrdersListViewAdapter(Context context, ArrayList dataSet) {
+    public OrdersListViewAdapter(Context context, ArrayList dataSet, String url, String keyword, String driverId) {
         this.context = context;
         this.dataSet = dataSet;
+
+        this.url = url;
+        this.keyword = keyword;
+        this.driverId = driverId;
     }
 
     @Override
@@ -68,6 +73,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
             holder.nameTextView = (TextView) view.findViewById(R.id.name);
             holder.addressTextView = (TextView) view.findViewById(R.id.address);
+            holder.statusTextView =  (TextView) view.findViewById(R.id.status);
             holder.customerImage = (ImageView) view.findViewById(R.id.customer_image); // |•|
             holder.cellContainer = (RelativeLayout) view.findViewById(R.id.cell_container_relative_layout);
 
@@ -87,6 +93,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
         // TextViews Setting
         holder.nameTextView.setText("Заказчик : " + dataSet.get(i).getCustomerName());
         holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
+        holder.statusTextView.setText(String.valueOf(dataSet.get(i).getStatus()));
 
         //REFRESH
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -108,7 +115,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //        dataSet.clear();
 ////        dataSet.addAll(newList);
         // TODO request here
-        HtttpRequester.request();
+        HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
 
 
         this.notifyDataSetChanged();
@@ -117,7 +124,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
 
     private class ViewHolder {
-        protected TextView nameTextView, addressTextView;
+        protected TextView nameTextView, addressTextView, statusTextView;
         protected ImageView customerImage;
         protected RelativeLayout cellContainer;
     }

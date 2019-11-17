@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     public final static String NEW_STATUS_ID_RESPONSE = "RESPONSE_WITH_NEW_STATUS_ID";
     public final static String CLICKED_ORDER_EXTRA = "ClickedOrder";
     public final static String SERVER_URL_EXTRA = "SERVER_URL_EXTRA";
+
     //Fields
     private ListView ordersListView;
     private ArrayList <OrderDataModel> ordersList;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private static ProgressDialog progressDialog;
     SwipeRefreshLayout swipeToRefreshWidget;
 
-    private String username, password, url;
+    private String username, password, url, driverId, keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                         try {
                             JSONObject json = response; //new JSONObject(response);
 
+                            driverId = json.optString("id");
+                            keyword = json.optString("keyword");
+
+
                             if (json.optString("status").equals("OK")) { // ???optionallllyyy????
 
                                 ordersList = new ArrayList<>();
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         removeSimpleProgressDialog();
 
-        listAdapter = new OrdersListViewAdapter(this, ordersList);
+        listAdapter = new OrdersListViewAdapter(this, ordersList, url, keyword, driverId);
         ordersListView.setAdapter(listAdapter);
 
         // SEGUE
