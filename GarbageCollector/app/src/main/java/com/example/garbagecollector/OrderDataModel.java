@@ -1,5 +1,6 @@
 package com.example.garbagecollector;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 
 import java.io.Serializable;
@@ -115,5 +116,6 @@ public class OrderDataModel implements Serializable {
         return phoneNumber;
     }
 
-    // METHODS
+    // STATIC METHODS
+
 }

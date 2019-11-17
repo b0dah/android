@@ -1,6 +1,7 @@
 package com.example.garbagecollector;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,13 +96,25 @@ public class OrdersListViewAdapter extends BaseAdapter {
         holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
         holder.statusTextView.setText(String.valueOf(dataSet.get(i).getStatus()));
 
+        //IMAGE
+//        holder.customerImage.setImageResource((int)1);
+        String uri = "@drawable/av" + String.valueOf(i%5+1);
+        int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+        Drawable resource = context.getResources().getDrawable(imageResource);
+
+        //holder.customerImage.setImageDrawable(resource);
+
+        holder.customerImage.setImageResource(R.drawable.av1);
+
+
+
         //REFRESH
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshUI();
-            }
-        });
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshUI();
+//            }
+//        });
 
         return view;
     }
@@ -128,6 +141,5 @@ public class OrdersListViewAdapter extends BaseAdapter {
         protected ImageView customerImage;
         protected RelativeLayout cellContainer;
     }
-
 
 }
