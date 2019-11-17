@@ -98,13 +98,13 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
         //IMAGE
 //        holder.customerImage.setImageResource((int)1);
-        String uri = "@drawable/av" + String.valueOf(i%5+1);
+        String uri = ("@drawable/av").concat(String.valueOf(i%5 + 1));
         int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
         Drawable resource = context.getResources().getDrawable(imageResource);
 
-        //holder.customerImage.setImageDrawable(resource);
+        holder.customerImage.setImageDrawable(resource);
 
-        holder.customerImage.setImageResource(R.drawable.av1);
+//        holder.customerImage.setImageResource(R.drawable.av1);
 
 
 
