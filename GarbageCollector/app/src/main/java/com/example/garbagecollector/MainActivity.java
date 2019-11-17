@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         ordersListView = findViewById(R.id.ordersListView);
 
-
-
         //Configuring Swipe to refresh
 //        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 //        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -65,6 +68,8 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
             holder.nameTextView = (TextView) view.findViewById(R.id.name);
             holder.addressTextView = (TextView) view.findViewById(R.id.address);
+            holder.customerImage = (ImageView) view.findViewById(R.id.customer_image); // |•|
+            holder.cellContainer = (RelativeLayout) view.findViewById(R.id.cell_container_relative_layout);
 
             view.setTag(holder);
         }
@@ -72,6 +77,14 @@ public class OrdersListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
+        //MARK: ANIMATION (?) Dunno, is it appropriate place foк animation applying
+        //Apply animation for image
+        holder.customerImage.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition));
+
+        //Apply animation for the Card
+        holder.cellContainer.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale));
+
+        // TextViews Setting
         holder.nameTextView.setText("Заказчик : " + dataSet.get(i).getCustomerName());
         holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
 
@@ -105,6 +118,8 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
     private class ViewHolder {
         protected TextView nameTextView, addressTextView;
+        protected ImageView customerImage;
+        protected RelativeLayout cellContainer;
     }
 
 
