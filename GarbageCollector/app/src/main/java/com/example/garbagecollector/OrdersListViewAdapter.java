@@ -125,10 +125,11 @@ public class OrdersListViewAdapter extends BaseAdapter {
     }
 
     private void refreshUI(){
-//        dataSet.clear();
-////        dataSet.addAll(newList);
         // TODO request here
-        HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
+        dataSet.clear();
+        ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
+        dataSet.addAll(newList);
+
 
 
         this.notifyDataSetChanged();

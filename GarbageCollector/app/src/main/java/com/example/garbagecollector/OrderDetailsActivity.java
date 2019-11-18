@@ -74,7 +74,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         redrawInterface();
     }
 
-    public void didChangeStatusButtonClick(View view) {
+    public void didChangeStatusButtonClick(View view/*del?*/) {
 
         // MARK: Changing local instance status and redrawing interface
         if (receivedOrder != null) {
@@ -110,7 +110,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
 
                 // TODO: change status to SEEN
-
+//                    didChangeStatusButtonClick();
+//                    dispatchQueue with delay 700ms
                 break;
 
             case SEEN:
