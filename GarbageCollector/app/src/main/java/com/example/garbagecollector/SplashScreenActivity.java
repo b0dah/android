@@ -14,17 +14,19 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intentToMainScreen = new Intent(SplashScreenActivity.this, MainActivity.class);
-//                startActivity(intentToMainScreen);
-//                finish();
-//            }
-//        }, SPLASH_SCREEN_TIME_OUT);
+        getSupportActionBar().hide();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intentToMainScreen = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(intentToMainScreen);
+                finish();
+            }
+        }, SPLASH_SCREEN_TIME_OUT);
 
     }
 }
