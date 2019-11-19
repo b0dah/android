@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         ordersListView = findViewById(R.id.ordersListView);
         ordersListView.setDivider(null);
+        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 
         //Configuring Swipe to refresh
 //        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
@@ -66,6 +67,17 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //                ArrayList<OrderDataModel> a = new ArrayList<>();
 //                updateOrdersList(a);
 //                swipeToRefreshWidget.setRefreshing(false);
+//            }
+//        });
+
+//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                OrderDataModel sampleOrder = new OrderDataModel();
+//                sampleOrder.setOriginAdress("origin address");
+//                sampleOrder.setCustomerName("customer name");
+//                ordersList.add(sampleOrder);
+//                listAdapter.notifyDatasetChanged();
 //            }
 //        });
 
@@ -176,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         removeSimpleProgressDialog();
 
-        listAdapter = new OrdersListViewAdapter(this, ordersList, url, keyword, driverId);
+        listAdapter = new OrdersListViewAdapter(this, ordersList, swipeToRefreshWidget, url, keyword, driverId);
         ordersListView.setAdapter(listAdapter);
 
         // SEGUE
