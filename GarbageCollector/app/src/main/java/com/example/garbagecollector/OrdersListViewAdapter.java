@@ -2,6 +2,7 @@ package com.example.garbagecollector;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 public class OrdersListViewAdapter extends BaseAdapter {
 
@@ -98,7 +98,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
         holder.statusTextView.setText(String.valueOf(dataSet.get(i).getStatus()));
 
         //IMAGE
-        String uri = ("@drawable/av").concat(String.valueOf(i%5 + 1));
+        String uri = ("@drawable/av").concat(String.valueOf(dataSet.get(i).getId()%5 + 1));
         int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
         Drawable resource = context.getResources().getDrawable(imageResource);
 
@@ -110,16 +110,17 @@ public class OrdersListViewAdapter extends BaseAdapter {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //refreshUI();
-                //swipeRefreshLayout.setRefreshing(false);
+                refreshUI();
 
-                OrderDataModel sampleOrder = new OrderDataModel();
-                sampleOrder.setOriginAdress("******* origin address");
-                sampleOrder.setCustomerName("******* customer name");
-                dataSet.add(sampleOrder);
-                OrdersListViewAdapter.this.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
+//                OrderDataModel sampleOrder = new OrderDataModel();
+//                sampleOrder.setOriginAdress("******* origin address");
+//                sampleOrder.setCustomerName("******* customer name");
+//                dataSet.add(sampleOrder);
+//                OrdersListViewAdapter.this.notifyDataSetChanged();
+//                swipeRefreshLayout.setRefreshing(false);
             }
+
+
         });
 
         return view;
@@ -132,11 +133,20 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
     private void refreshUI(){
         // TODO request here
-        //dataSet.clear();
-        //ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
-        //dataSet.addAll(newList);
 
-        //this.notifyDataSetChanged();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dataSet.clear();
+                ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
+                dataSet.addAll(newList);
+
+
+            }
+        },1000);
+
+        OrdersListViewAdapter.this.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
 
     }
 

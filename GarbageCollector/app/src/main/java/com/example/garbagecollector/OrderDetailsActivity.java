@@ -1,8 +1,10 @@
 package com.example.garbagecollector;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.textclassifier.TextLinks;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     TextView nameTextView, originAddressTextView, destinationAddressTextView, deliveryTimeTextView,
     paymentTextView, numberOfMoversTextView, phoneNumberTextView, doneStatusTextView;
     Button changeStatusButton;
+    ImageView customerImageView;
 
     private OrderDataModel receivedOrder;
     private String serverUrl;
@@ -56,6 +60,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         changeStatusButton = (Button) findViewById(R.id.change_status_button);
         doneStatusTextView = (TextView) findViewById(R.id.done_status);
+        customerImageView = (ImageView) findViewById(R.id.customer_image);
 
 
         //MARK: Receiving Value into activity using intent   //OrderDataModel TempHolder = (OrderDataModel) getIntent().getSerializableExtra("ClickedOrder");
@@ -70,8 +75,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
         destinationAddressTextView.setText("\uD83C\uDFC1 Куда:  " + receivedOrder.getDestinantionAddress());
         deliveryTimeTextView.setText("\uD83D\uDD50 Ко времени:  " + receivedOrder.getDeliveryTime());
         paymentTextView.setText("\uD83D\uDCB8 Сумма к оплате:  " + String.valueOf(Double.valueOf(receivedOrder.getPayment())) + "₱");
-        numberOfMoversTextView.setText("‍️\uD83E\uDD84 ️Грузчиков(\uD83E\uDD2C):  " + String.valueOf(receivedOrder.getNumberOfMovers()));
+        numberOfMoversTextView.setText("‍️\uD83E\uDD84 ️Грузчиков:  " + String.valueOf(receivedOrder.getNumberOfMovers()));
         phoneNumberTextView.setText("\uD83D\uDCF1 Номер телефона заказчика:  " + receivedOrder.getPhoneNumber());
+
+
+        Context context = getApplicationContext();
+
+        String uri = ("@drawable/av").concat(String.valueOf(receivedOrder.getId()%5 + 1));
+        int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+        Drawable resource = context.getResources().getDrawable(imageResource);
+        this.customerImageView.setImageDrawable(resource); //        holder.customerImage.setImageResource(R.drawable.av1);
 
         redrawInterface();
     }
