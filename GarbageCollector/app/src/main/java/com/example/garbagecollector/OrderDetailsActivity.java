@@ -10,6 +10,7 @@ import android.os.PersistableBundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -90,6 +91,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     public void didChangeStatusButtonClick(View view/*del?*/) {
+
+        changeStatusButton.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_scale_animation));
 
         // MARK: Changing local instance status and redrawing interface
         if (receivedOrder != null) {
