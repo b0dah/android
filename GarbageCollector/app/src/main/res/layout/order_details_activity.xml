@@ -16,6 +16,8 @@
         android:paddingLeft="40dp"
 
         android:paddingRight="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -23,7 +25,7 @@
             android:id="@+id/customer_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:baselineAlignBottom="false"
             tools:srcCompat="@tools:sample/avatars" />
 

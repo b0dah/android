@@ -1,6 +1,7 @@
 package com.example.garbagecollector;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -95,7 +97,19 @@ public class OrdersListViewAdapter extends BaseAdapter {
         // TextViews Setting
         holder.nameTextView.setText("Заказчик : " + dataSet.get(i).getCustomerName());
         holder.addressTextView.setText("Адрес : " + dataSet.get(i).getOriginAdress());
-        holder.statusTextView.setText(String.valueOf(dataSet.get(i).getStatus()));
+
+        switch (dataSet.get(i).getStatus()) {
+            case DEFAULT: holder.statusTextView.setText("Принят"); break;
+            case SEEN: holder.statusTextView.setText("Просмотрен"); break; // 3 просмотрел
+            case STARTED: holder.statusTextView.setText("Выполняется"); break; // 4 выехал в начальную точку
+            case ARRIVED: holder.statusTextView.setText("На месте"); break; // 5 прибыл в начальную точку
+            case DONE: holder.statusTextView.setText("Выполнен");
+                holder.statusTextView.setTextColor(ContextCompat.getColor(context, R.color.done_status_color));  //holder.statusTextView.setTextColor(context.getResources().getColor(R.color.done_status_color));
+                break; // 6 заврешиил
+            default: holder.statusTextView.setText("Ошибка");
+                holder.statusTextView.setTextColor(ContextCompat.getColor(context, R.color.error_status_color));// LEGA (String.valueOf(dataSet.get(i).getStatus()));
+        }
+
 
         //IMAGE
         String uri = ("@drawable/av").concat(String.valueOf(dataSet.get(i).getId()%5 + 1));
