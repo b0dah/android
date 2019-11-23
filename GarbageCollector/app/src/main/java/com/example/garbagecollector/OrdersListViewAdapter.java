@@ -132,9 +132,8 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                dataSet.add(sampleOrder);
 //                OrdersListViewAdapter.this.notifyDataSetChanged();
 //                swipeRefreshLayout.setRefreshing(false);
+
             }
-
-
         });
 
         return view;
@@ -144,6 +143,13 @@ public class OrdersListViewAdapter extends BaseAdapter {
     public void updateOrdersList(ArrayList<OrderDataModel> newList) {
 
     }
+
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
 
     private void refreshUI(){
         // TODO request here
@@ -155,7 +161,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
                 ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
                 dataSet.addAll(newList);
 
-
+                //swipeRefreshLayout.setRefreshing(true);
             }
         },1000);
 

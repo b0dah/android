@@ -103,6 +103,72 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                         System.out.println(order.getStatus());
                 }
             }
+
+            // REQUEST WITH KEYBOARD
+//            final Context context = this;
+//
+//            ordersList = new ArrayList<>();
+//
+//            final JSONObject requestBody = new JSONObject();
+//
+//            try {
+//                requestBody.put("request_type", "get_order_list");
+//                requestBody.put("id", driverId);
+//                requestBody.put("keyword", keyword);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+//
+//                @Override
+//                public void onResponse(JSONObject response) {
+//
+//                    try {
+//                        if (!response.optString("status").equals("OK")) {
+//                            Toast.makeText(context, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
+//                        } else {
+//                            JSONArray jsonArray = response.getJSONArray("data");
+//
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                                OrderDataModel currentOrder = new OrderDataModel();
+//                                JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
+//
+//                                currentOrder.setId(currentJsonArrayObject.getInt("id"));
+//                                currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
+//                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+//                                currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
+//                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+//                                currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
+//                                currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
+//                                currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
+//                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
+//                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
+//
+//                                ordersList.add(currentOrder);
+//                            }
+//                        }
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG);
+//                }
+//            });
+//
+//            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
+//            requestQueue.add(request);
+//
+//            //ordersListView.deferNotifyDataSetChanged();
+//          this.listAdapter.notifyDataSetChanged();
+
         }
     }
 
