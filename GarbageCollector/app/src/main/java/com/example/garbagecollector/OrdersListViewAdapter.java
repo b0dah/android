@@ -141,17 +141,17 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                swipeRefreshLayout.setRefreshing(false);
 
                 // SYNC REQUEST
-                RequestFuture<JSONObject> future = RequestFuture.newFuture();
-                JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
-                requestQueue.add(request);
-
-                try {
-                    JSONObject response = future.get(); // this will block
-                } catch (InterruptedException e) {
-                    // exception handling
-                } catch (ExecutionException e) {
-                    // exception handling
-                }
+//                RequestFuture<JSONObject> future = RequestFuture.newFuture();
+//                JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
+//                requestQueue.add(request);
+//
+//                try {
+//                    JSONObject response = future.get(); // this will block
+//                } catch (InterruptedException e) {
+//                    // exception handling
+//                } catch (ExecutionException e) {
+//                    // exception handling
+//                }
 
             }
         });
@@ -159,29 +159,29 @@ public class OrdersListViewAdapter extends BaseAdapter {
         return view;
     }
 
-    public InputStream runInputStreamRequest(int method, String url, Response.ErrorListener errorListener) {
-        RequestFuture<InputStream> future = RequestFuture.newFuture();
-        InputStreamRequest request = new InputStreamRequest(method, url, future, errorListener);
-        getQueue().add(request);
-        try {
-            return future.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            Log.e("Retrieve cards api call interrupted.", e);
-            errorListener.onErrorResponse(new VolleyError(e));
-        } catch (ExecutionException e) {
-            Log.e("Retrieve cards api call failed.", e);
-            errorListener.onErrorResponse(new VolleyError(e));
-        } catch (TimeoutException e) {
-            Log.e("Retrieve cards api call timed out.", e);
-            errorListener.onErrorResponse(new VolleyError(e));
-        }
-        return null;
-    }
+    // SYNCpublic InputStream runInputStreamRequest(int method, String url, Response.ErrorListener errorListener) {
+//        RequestFuture<InputStream> future = RequestFuture.newFuture();
+//        InputStreamRequest request = new InputStreamRequest(method, url, future, errorListener);
+//        getQueue().add(request);
+//        try {
+//            return future.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+//        } catch (InterruptedException e) {
+//            Log.e("Retrieve cards api call interrupted.", e);
+//            errorListener.onErrorResponse(new VolleyError(e));
+//        } catch (ExecutionException e) {
+//            Log.e("Retrieve cards api call failed.", e);
+//            errorListener.onErrorResponse(new VolleyError(e));
+//        } catch (TimeoutException e) {
+//            Log.e("Retrieve cards api call timed out.", e);
+//            errorListener.onErrorResponse(new VolleyError(e));
+//        }
+//        return null;
+//    }
 
-
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
+    public void updateOrdersLists(ArrayList<OrderDataModel> newList) {
+        dataSet.clear();
+        dataSet.addAll(newList);
+        this.notifyDataSetChanged();
     }
 
 

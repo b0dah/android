@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     //Fields
     private ListView ordersListView;
     private ArrayList <OrderDataModel> ordersList;
-    private ListAdapter listAdapter;
+    private /*ListAdapter*/ OrdersListViewAdapter listAdapter;
 
     private static ProgressDialog progressDialog;
     SwipeRefreshLayout swipeToRefreshWidget;
@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         ordersListView = findViewById(R.id.ordersListView);
         ordersListView.setDivider(null);
         swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
+
+        // ??????
+        //ordersListView.setAdapter(listAdapter);
 
         //Configuring Swipe to refresh
 //        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
@@ -107,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
             // REQUEST WITH KEYBOARD
 //            final Context context = this;
 //
-//            ordersList = new ArrayList<>();
+//            //ordersList = new ArrayList<>();
+//                    //ordersList.clear();
+//                   //final ArrayList<OrderDataModel> newOrderList = new ArrayList<>();
 //
 //            final JSONObject requestBody = new JSONObject();
 //
@@ -147,8 +152,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
 //                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
 //
-//                                ordersList.add(currentOrder);
+//                                //newOrderList.add(currentOrder);
 //                            }
+//
 //                        }
 //
 //                    } catch (JSONException e) {
@@ -164,18 +170,19 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //            });
 //
 //            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
-//            requestQueue.add(request);
+//            //requestQueue.add(request);
 //
-//            //ordersListView.deferNotifyDataSetChanged();
-//          this.listAdapter.notifyDataSetChanged();
+//            //listAdapter.notifyDataSetChanged();
+//            //listAdapter.updateOrdersLists(newOrderList);
 
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     // Methods
     private void retrieveJSONwithAuthentification() {
 
-        showSimpleProgressDialog(this, "loading", "fetching JSON", false);
+        //showSimpleProgressDialog(this, "loading", "fetching JSON", false);
 
         final JSONObject requestBody = new JSONObject();
 
@@ -248,9 +255,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
-
 
     private void setupListView() {
 
