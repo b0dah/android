@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     // Methods
     private void retrieveJSONwithAuthentification() {
 
-        //showSimpleProgressDialog(this, "loading", "fetching JSON", true);
+        showSimpleProgressDialog(this, "loading", "fetching JSON", false);
 
         final JSONObject requestBody = new JSONObject();
 

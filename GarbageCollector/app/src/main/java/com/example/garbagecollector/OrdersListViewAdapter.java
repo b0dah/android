@@ -17,7 +17,14 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class OrdersListViewAdapter extends BaseAdapter {
 
@@ -133,15 +140,42 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                OrdersListViewAdapter.this.notifyDataSetChanged();
 //                swipeRefreshLayout.setRefreshing(false);
 
+                // SYNC REQUEST
+                RequestFuture<JSONObject> future = RequestFuture.newFuture();
+                JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
+                requestQueue.add(request);
+
+                try {
+                    JSONObject response = future.get(); // this will block
+                } catch (InterruptedException e) {
+                    // exception handling
+                } catch (ExecutionException e) {
+                    // exception handling
+                }
+
             }
         });
 
         return view;
     }
 
-    // LEGACY //Rewrite new fetched data and update ListView
-    public void updateOrdersList(ArrayList<OrderDataModel> newList) {
-
+    public InputStream runInputStreamRequest(int method, String url, Response.ErrorListener errorListener) {
+        RequestFuture<InputStream> future = RequestFuture.newFuture();
+        InputStreamRequest request = new InputStreamRequest(method, url, future, errorListener);
+        getQueue().add(request);
+        try {
+            return future.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Log.e("Retrieve cards api call interrupted.", e);
+            errorListener.onErrorResponse(new VolleyError(e));
+        } catch (ExecutionException e) {
+            Log.e("Retrieve cards api call failed.", e);
+            errorListener.onErrorResponse(new VolleyError(e));
+        } catch (TimeoutException e) {
+            Log.e("Retrieve cards api call timed out.", e);
+            errorListener.onErrorResponse(new VolleyError(e));
+        }
+        return null;
     }
 
 

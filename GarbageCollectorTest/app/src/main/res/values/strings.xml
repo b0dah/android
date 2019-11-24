@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GarbageCollectorTest</string>
+    <string name="msg_token_fmt">default</string>
 </resources>
