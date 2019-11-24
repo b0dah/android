@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +14,27 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
@@ -41,7 +53,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
         this.url = url;
         this.keyword = keyword;
         this.driverId = driverId;
-        this.swipeRefreshLayout = swipeRefreshLayout;
+//        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     @Override
@@ -121,17 +133,23 @@ public class OrdersListViewAdapter extends BaseAdapter {
         //IMAGE
         String uri = ("@drawable/av").concat(String.valueOf(dataSet.get(i).getId()%5 + 1));
         int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
-        Drawable resource = context.getResources().getDrawable(imageResource);
+        final Drawable resource = context.getResources().getDrawable(imageResource);
 
         holder.customerImage.setImageDrawable(resource); //        holder.customerImage.setImageResource(R.drawable.av1);
 
 
 
         //REFRESH
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshUI();
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+                //refreshUI();
+
+                // ====== from site ============
+//                notifyDataSetChanged();
+//                dataSet.clear();
+//                fetchOrderListWithKeyWord();
+                // =============================
 
 //                OrderDataModel sampleOrder = new OrderDataModel();
 //                sampleOrder.setOriginAdress("******* origin address");
@@ -141,42 +159,37 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                swipeRefreshLayout.setRefreshing(false);
 
                 // SYNC REQUEST
+//                final JSONObject requestBody = new JSONObject();
+//
+//                try {
+//                    requestBody.put("request_type", "get_order_list");
+//                    requestBody.put("id", driverId);
+//                    requestBody.put("keyword", keyword);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
 //                RequestFuture<JSONObject> future = RequestFuture.newFuture();
-//                JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(), future, future);
+//                JsonObjectRequest request = new JsonObjectRequest(url, requestBody, future, future);
+//                RequestQueue requestQueue = Volley.newRequestQueue(context);
 //                requestQueue.add(request);
 //
 //                try {
 //                    JSONObject response = future.get(); // this will block
+//                    System.out.println("RESPONSE --> " + response);
+//
 //                } catch (InterruptedException e) {
 //                    // exception handling
 //                } catch (ExecutionException e) {
 //                    // exception handling
 //                }
-
-            }
-        });
+//
+//            }
+//        });
 
         return view;
     }
-
-    // SYNCpublic InputStream runInputStreamRequest(int method, String url, Response.ErrorListener errorListener) {
-//        RequestFuture<InputStream> future = RequestFuture.newFuture();
-//        InputStreamRequest request = new InputStreamRequest(method, url, future, errorListener);
-//        getQueue().add(request);
-//        try {
-//            return future.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            Log.e("Retrieve cards api call interrupted.", e);
-//            errorListener.onErrorResponse(new VolleyError(e));
-//        } catch (ExecutionException e) {
-//            Log.e("Retrieve cards api call failed.", e);
-//            errorListener.onErrorResponse(new VolleyError(e));
-//        } catch (TimeoutException e) {
-//            Log.e("Retrieve cards api call timed out.", e);
-//            errorListener.onErrorResponse(new VolleyError(e));
-//        }
-//        return null;
-//    }
 
     public void updateOrdersLists(ArrayList<OrderDataModel> newList) {
         dataSet.clear();
@@ -188,19 +201,86 @@ public class OrdersListViewAdapter extends BaseAdapter {
     private void refreshUI(){
         // TODO request here
 
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                dataSet.clear();
+                notifyDataSetChanged();
+
+                dataSet = new ArrayList<>();
                 ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
                 dataSet.addAll(newList);
-
-                //swipeRefreshLayout.setRefreshing(true);
             }
         },1000);
 
-        OrdersListViewAdapter.this.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+
+    public void  fetchOrderListWithKeyWord() {
+
+        final JSONObject requestBody = new JSONObject();
+
+        try {
+            requestBody.put("request_type", "get_order_list");
+            requestBody.put("id", driverId);
+            requestBody.put("keyword", keyword);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    if (!response.optString("status").equals("OK")) {
+                        Toast.makeText(context, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
+                    } else {
+                        JSONArray jsonArray = response.getJSONArray("data");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            OrderDataModel currentOrder = new OrderDataModel();
+                            JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
+
+                            currentOrder.setId(currentJsonArrayObject.getInt("id"));
+                            currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
+                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                            currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
+                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                            currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
+                            currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
+                            currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
+                            currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
+                            currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
+
+                            dataSet.add(currentOrder);
+                        }
+
+                        notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
+        requestQueue.add(request);
 
     }
 

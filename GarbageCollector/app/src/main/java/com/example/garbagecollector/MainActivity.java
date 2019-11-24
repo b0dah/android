@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         ordersListView = findViewById(R.id.ordersListView);
         ordersListView.setDivider(null);
-        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
+        //swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 
         // ??????
         //ordersListView.setAdapter(listAdapter);
