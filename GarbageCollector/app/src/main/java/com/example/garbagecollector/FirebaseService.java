@@ -75,7 +75,7 @@ public class FirebaseService extends FirebaseMessagingService {
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Driver's channel", NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
-        manager.notify(123, notification);
+        manager.notify(new Random().nextInt(), notification);
     }
 
 

@@ -241,9 +241,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
                                     ordersList.add(currentOrder);
                                 }
-
-                                listAdapter.notifyDataSetChanged();
-
+                                setupListView();
                             }
                             else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
 
