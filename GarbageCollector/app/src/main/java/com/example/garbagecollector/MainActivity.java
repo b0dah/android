@@ -109,11 +109,19 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 }
             }
 
-            // REQUEST WITH KEYWORD
+            listAdapter.notifyDataSetChanged();
+        }
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+
+        // REQUEST WITH KEYWORD
 //            final Context context = this;
 //
 //            //ordersList = new ArrayList<>();
-//                    //ordersList.clear();
+//                    ordersList.clear();
 //                   //final ArrayList<OrderDataModel> newOrderList = new ArrayList<>();
 //
 //            final JSONObject requestBody = new JSONObject();
@@ -154,9 +162,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
 //                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
 //
-//                                //newOrderList.add(currentOrder);
+//                                ordersList.add(currentOrder);
 //                            }
-//
+//                            setupListView();
 //                        }
 //
 //                    } catch (JSONException e) {
@@ -172,14 +180,12 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 //            });
 //
 //            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
-//            //requestQueue.add(request);
-//
-//            //listAdapter.notifyDataSetChanged();
-//            //listAdapter.updateOrdersLists(newOrderList);
+//            requestQueue.add(request);
 
-            listAdapter.notifyDataSetChanged();
-        }
-    }
+            //listAdapter.notifyDataSetChanged();
+            //listAdapter.updateOrdersLists(newOrderList);
+
+    //}
 
     // Methods
     private void retrieveJSONwithAuthentification() {
@@ -236,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     ordersList.add(currentOrder);
                                 }
 
-                                setupListView();
+                                listAdapter.notifyDataSetChanged();
 
                             }
                             else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
