@@ -33,7 +33,7 @@ public class LoginDialog extends AppCompatDialogFragment {
     private EditText socketEditText;
 
     private LoginDialogListener listener;
-    
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
