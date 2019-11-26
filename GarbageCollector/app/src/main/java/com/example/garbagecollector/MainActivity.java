@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private static ProgressDialog progressDialog;
     SwipeRefreshLayout swipeToRefreshWidget;
 
-    private String username, password, url, driverId, keyword;
+    private String username, password, url, driverId, keyword, deviceToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,17 +124,16 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
                             //Log.w(TAG, "getInstanceId failed", task.getException());
+                            System.out.println("++++ getting tag failed");
                             return;
                         }
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
 
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token);
-                        //Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-                        System.out.println("TOKEN " + token);
+                        // Log and toast //Log.d(TAG, msg); //String msg = getString(R.string.msg_token_fmt, token);
+                        System.out.println("TOKEN " + token); //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        deviceToken = token;
                     }
                 });
     }

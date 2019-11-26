@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -26,17 +27,12 @@ public class FirebaseService extends FirebaseMessagingService {
 
     final String NOTIFICATION_CHANNEL_ID = "DriverNotifications";
 
-    String title;
-    String body;
-    TextView message;
-
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+//    @Override
+//    public void onMessageReceived(RemoteMessage remoteMessage) {
+//        super.onMessageReceived(remoteMessage);
+//
+//        // TODO(developer): Handle FCM messages here.
+//        Log.d(TAG, "From: " + remoteMessage.getFrom());
 
 //        // Check if message contains a data payload.
 //        if (remoteMessage.getData().size() > 0) {
@@ -50,24 +46,41 @@ public class FirebaseService extends FirebaseMessagingService {
 ////                handleNow();
 //            }
 
-            if (remoteMessage.getData().isEmpty())
-                showNotification(remoteMessage.getNotification().getTitle(),
-                        remoteMessage.getNotification().getBody());
+//            if (remoteMessage.getData().isEmpty())
+//                showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+//
+//                            // TODO: Implement notif with data if needed
+//                            else{
+//                                showNotification(remoteMessage.getData());
+//                            }
+//
+//        // Check if message contains a notification payload.
+//        if (remoteMessage.getNotification() != null) {
+//            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+//        }
 
-                            // TODO: Implement notif with data if needed
-                            else{
-                                showNotification(remoteMessage.getData());
-                            }
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(remoteMessage.getNotification().getTitle())
+                .setContentText(remoteMessage.getNotification().getBody())
+                .setSmallIcon(R.mipmap.ic_launcher) // PUSSY DESTROYER
+                .build();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Driver's channel", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-
+        manager.notify(123, notification);
     }
+
+
+
+
 
     private void showNotification(String title, String body) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -110,6 +123,7 @@ public class FirebaseService extends FirebaseMessagingService {
             notificationChannel.setLightColor(Color.BLUE);
             notificationChannel.setVibrationPattern(new long[]{0, 100, 500, 1000});
             notificationChannel.enableLights(true);
+
             notificationManager.createNotificationChannel(notificationChannel);
 
         }
@@ -141,7 +155,5 @@ public class FirebaseService extends FirebaseMessagingService {
 
     private void sendRegistrationToServer(String token) {
         //TODO implement this
-
-
     }
 }
