@@ -28,6 +28,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -95,23 +97,44 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         showLoginDialog();
 
         //FB
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-            NotificationChannel channel = new NotificationChannel("DriverNotifications", "DriverNotifications", NotificationManager.IMPORTANCE_DEFAULT);
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-
-        FirebaseMessaging.getInstance().subscribeToTopic("general")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//
+//            NotificationChannel channel = new NotificationChannel("DriverNotifications", "DriverNotifications", NotificationManager.IMPORTANCE_DEFAULT);
+//
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            manager.createNotificationChannel(channel);
+//        }
+//
+//        FirebaseMessaging.getInstance().subscribeToTopic("general")
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        String msg = "Successful";
+//                        if (!task.isSuccessful()) {
+//                            msg = "Failed";
+//                        }
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+        // TOKEN
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Successful";
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
-                            msg = "Failed";
+                            //Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
                         }
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        //String msg = getString(R.string.msg_token_fmt, token);
+                        //Log.d(TAG, msg);
+                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        System.out.println("TOKEN " + token);
                     }
                 });
     }
@@ -134,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 }
             }
 
-            // REQUEST WITH KEYBOARD
+            // REQUEST WITH KEYWORD
 //            final Context context = this;
 //
 //            //ordersList = new ArrayList<>();
