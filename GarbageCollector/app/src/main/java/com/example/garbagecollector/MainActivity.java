@@ -67,56 +67,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         ordersListView.setDivider(null);
         //swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 
-        // ??????
-        //ordersListView.setAdapter(listAdapter);
-
-        //Configuring Swipe to refresh
-//        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
-//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                //retrieveOrdersWithKeyword();
-//                ArrayList<OrderDataModel> a = new ArrayList<>();
-//                updateOrdersList(a);
-//                swipeToRefreshWidget.setRefreshing(false);
-//            }
-//        });
-
-//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                OrderDataModel sampleOrder = new OrderDataModel();
-//                sampleOrder.setOriginAdress("origin address");
-//                sampleOrder.setCustomerName("customer name");
-//                ordersList.add(sampleOrder);
-//                listAdapter.notifyDatasetChanged();
-//            }
-//        });
-
-        showLoginDialog();
-
-        //FB
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//
-//            NotificationChannel channel = new NotificationChannel("DriverNotifications", "DriverNotifications", NotificationManager.IMPORTANCE_DEFAULT);
-//
-//            NotificationManager manager = getSystemService(NotificationManager.class);
-//            manager.createNotificationChannel(channel);
-//        }
-//
-//        FirebaseMessaging.getInstance().subscribeToTopic("general")
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        String msg = "Successful";
-//                        if (!task.isSuccessful()) {
-//                            msg = "Failed";
-//                        }
-//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
         // TOKEN
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -132,10 +82,13 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                         String token = task.getResult().getToken();
 
                         // Log and toast //Log.d(TAG, msg); //String msg = getString(R.string.msg_token_fmt, token);
-                        System.out.println("TOKEN " + token); //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        System.out.println("            +          TOKEN " + token); //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
                         deviceToken = token;
                     }
                 });
+
+        showLoginDialog();
+
     }
 
     @Override
@@ -239,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
             requestBody.put("login", username);
             requestBody.put("password", password);
             requestBody.put("request_type", "authentication");
+            requestBody.put("token", deviceToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -387,6 +341,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         this.username = username;
         this.password = password;
         this.url = socket;
+
 
         retrieveJSONwithAuthentification();
 
