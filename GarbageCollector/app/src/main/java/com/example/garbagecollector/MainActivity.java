@@ -1,5 +1,7 @@
 package com.example.garbagecollector;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -23,6 +26,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private static ProgressDialog progressDialog;
     SwipeRefreshLayout swipeToRefreshWidget;
 
-    private String username, password, url, driverId, keyword;
+    private String username, password, url, driverId, keyword, deviceToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,34 +67,28 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         ordersListView.setDivider(null);
         //swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 
-        // ??????
-        //ordersListView.setAdapter(listAdapter);
+        // TOKEN
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            //Log.w(TAG, "getInstanceId failed", task.getException());
+                            System.out.println("++++ getting tag failed");
+                            return;
+                        }
 
-        //Configuring Swipe to refresh
-//        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
-//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                //retrieveOrdersWithKeyword();
-//                ArrayList<OrderDataModel> a = new ArrayList<>();
-//                updateOrdersList(a);
-//                swipeToRefreshWidget.setRefreshing(false);
-//            }
-//        });
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
 
-//        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                OrderDataModel sampleOrder = new OrderDataModel();
-//                sampleOrder.setOriginAdress("origin address");
-//                sampleOrder.setCustomerName("customer name");
-//                ordersList.add(sampleOrder);
-//                listAdapter.notifyDatasetChanged();
-//            }
-//        });
+                        // Log and toast //Log.d(TAG, msg); //String msg = getString(R.string.msg_token_fmt, token);
+                        System.out.println("            +          TOKEN " + token); //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        deviceToken = token;
+                    }
+                });
 
         showLoginDialog();
+
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                 }
             }
 
-            // REQUEST WITH KEYBOARD
+            // REQUEST WITH KEYWORD
 //            final Context context = this;
 //
 //            //ordersList = new ArrayList<>();
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
             requestBody.put("login", username);
             requestBody.put("password", password);
             requestBody.put("request_type", "authentication");
+            requestBody.put("token", deviceToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -338,6 +341,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         this.username = username;
         this.password = password;
         this.url = socket;
+
 
         retrieveJSONwithAuthentification();
 
