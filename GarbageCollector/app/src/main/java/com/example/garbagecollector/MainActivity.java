@@ -1,10 +1,11 @@
 package com.example.garbagecollector;
-/**/
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
@@ -113,7 +115,17 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         }
     }
 
-//    @Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (url != null) {
+            AsyncRequester requester = new AsyncRequester(this);
+            requester.execute();
+        }
+    }
+
+    //    @Override
 //    protected void onResume() {
 //        super.onResume();
 //
@@ -354,4 +366,39 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         FileHolder.writeLoginDataToFile(username, password, socket, this);
     }
 
+
+    class AsyncRequester extends AsyncTask {
+
+        private ProgressDialog progressDialog;
+
+        public AsyncRequester(MainActivity activity) {
+            progressDialog = new ProgressDialog(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("loading ...");
+            progressDialog.setCancelable(false);
+
+            progressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+        }
+    }
 }
