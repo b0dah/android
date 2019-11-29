@@ -140,10 +140,10 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
 
         //REFRESH
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshUI();
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshUI();
 
                 // ====== from site ============
 //                notifyDataSetChanged();
@@ -184,8 +184,8 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                    // exception handling
 //                }
 //
-            }
-        });
+//            }
+//        });
 
         return view;
     }

@@ -127,7 +127,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             case DEFAULT:
                 // Style for button
                 changeStatusButton.setText("Начать исполнение");
-                changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
+                changeStatusButton.setBackgroundColor(Color.rgb(247, 233, 173));
 
                 // TODO: change status to SEEN
 //                    didChangeStatusButtonClick();
@@ -138,7 +138,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             case SEEN:
                 // Style for button
-                changeStatusButton.setText("Начать исполнение (п)");
+                changeStatusButton.setText("Начать исполнение");
                 changeStatusButton.setBackgroundColor(Color.rgb(245, 194, 66));
                 break;
 
@@ -210,7 +210,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
@@ -227,6 +227,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
             int statusId = receivedOrder.getStatus().ordinal() + 2; // 2 is server shift
             receivedOrder.setStatus(statusId+1);
             redrawInterface();
+
+            Intent intent = new Intent();
+            intent.putExtra(MainActivity.ORDER_ID_RESPONSE, receivedOrder.getId());
+            intent.putExtra(MainActivity.NEW_STATUS_ID_RESPONSE, statusId + 1);
+            setResult(RESULT_OK, intent);
+
+            changeOrderStatusOnServer(serverUrl, receivedOrder.getId(), statusId+1);
         }
     }
 }
