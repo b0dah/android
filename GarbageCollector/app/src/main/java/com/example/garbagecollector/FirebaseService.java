@@ -79,9 +79,6 @@ public class FirebaseService extends FirebaseMessagingService {
     }
 
 
-
-
-
     private void showNotification(String title, String body) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 

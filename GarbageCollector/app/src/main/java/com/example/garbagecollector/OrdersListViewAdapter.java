@@ -140,17 +140,16 @@ public class OrdersListViewAdapter extends BaseAdapter {
 
 
         //REFRESH
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-                //refreshUI();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshUI();
 
                 // ====== from site ============
 //                notifyDataSetChanged();
 //                dataSet.clear();
 //                fetchOrderListWithKeyWord();
                 // =============================
-
 //                OrderDataModel sampleOrder = new OrderDataModel();
 //                sampleOrder.setOriginAdress("******* origin address");
 //                sampleOrder.setCustomerName("******* customer name");
@@ -185,22 +184,21 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //                    // exception handling
 //                }
 //
-//            }
-//        });
+            }
+        });
 
         return view;
     }
 
-    public void updateOrdersLists(ArrayList<OrderDataModel> newList) {
-        dataSet.clear();
-        dataSet.addAll(newList);
-        this.notifyDataSetChanged();
-    }
+//    public void updateOrdersLists(ArrayList<OrderDataModel> newList) {
+//        dataSet.clear();
+//        dataSet.addAll(newList);
+//        this.notifyDataSetChanged();
+//    }
 
 
-    private void refreshUI(){
-        // TODO request here
-
+    private void refreshUI() {
+            // TODO request here
 
 
         new Handler().postDelayed(new Runnable() {
