@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -29,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.datatype.Duration;
 
@@ -98,7 +101,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         if (receivedOrder != null) {
 
             // Changing local copy
-            int num = receivedOrder.getStatus().ordinal();
             int statusId = receivedOrder.getStatus().ordinal() + 2; // 2 is server shift
             receivedOrder.setStatus(statusId+1);
 
@@ -130,6 +132,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 // TODO: change status to SEEN
 //                    didChangeStatusButtonClick();
 //                    dispatchQueue with delay 700ms
+                AsyncStatusChanger changer = new AsyncStatusChanger();
+                changer.execute();
                 break;
 
             case SEEN:
@@ -194,4 +198,37 @@ public class OrderDetailsActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
     }
+
+//    ======= STATUS CHANGER =======
+    class AsyncStatusChanger extends AsyncTask {
+
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+
+            assert (receivedOrder.getStatus() == OrderStatus.DEFAULT);
+
+            int statusId = receivedOrder.getStatus().ordinal() + 2; // 2 is server shift
+            receivedOrder.setStatus(statusId+1);
+            redrawInterface();
+        }
+    }
 }
+
+
