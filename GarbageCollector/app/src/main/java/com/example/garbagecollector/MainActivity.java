@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -347,8 +348,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     private void showLoginDialog(){
         LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show(getSupportFragmentManager(), "loginDialog");
 
+        loginDialog.show(getSupportFragmentManager(), "loginDialog");
         // Disable OK button whilst not all the fields filled
         //((LoginDialog)loginDialog).get
     }

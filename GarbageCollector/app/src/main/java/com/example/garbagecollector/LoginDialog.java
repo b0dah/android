@@ -8,7 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +34,10 @@ public class LoginDialog extends AppCompatDialogFragment {
     private EditText passwordEditText;
     private EditText socketEditText;
 
+    private ImageView logoImageView;
+
     private LoginDialogListener listener;
+
 
     @NonNull
     @Override
@@ -46,8 +51,6 @@ public class LoginDialog extends AppCompatDialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.login_alert_layout, null);
-
-
 
         builder.setView(view)
                 //.setTitle("Login")
@@ -64,10 +67,10 @@ public class LoginDialog extends AppCompatDialogFragment {
                         String password = passwordEditText.getText().toString();
                         String socket = socketEditText.getText().toString();
 
-
                         listener.applyFilledFields(username, password, socket);
                     }
                 });
+
 
         // TODO Disable OK button whilst not all the fields filled
 
@@ -79,11 +82,14 @@ public class LoginDialog extends AppCompatDialogFragment {
         usernameEditText = view.findViewById(R.id.username);
         passwordEditText = view.findViewById(R.id.password);
         socketEditText = view.findViewById(R.id.socket);
+        logoImageView = view.findViewById(R.id.logo);
+
 
         // set fetched text
         usernameEditText.setText(loginDetails[0]);
         passwordEditText.setText(loginDetails[1]);
         socketEditText.setText(loginDetails[2]);
+        logoImageView.setImageResource(R.drawable.logo);
 
         return builder.create();
     }
@@ -98,6 +104,10 @@ public class LoginDialog extends AppCompatDialogFragment {
             throw new ClassCastException(context.toString() + " must implement LoginDialogListener");
         }
     }
+
+
+
+
 
     public interface LoginDialogListener {
         void applyFilledFields(String username, String password, String socket);
