@@ -41,6 +41,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+enum RequestType {
+    regularUpdate,
+    swipeRefreshWidgetUpdate
+}
+
 public class MainActivity extends AppCompatActivity implements LoginDialog.LoginDialogListener {
 
     // DEFINE section
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private /*ListAdapter*/ OrdersListViewAdapter listAdapter;
 
     private static ProgressDialog progressDialog;
-    SwipeRefreshLayout swipeToRefreshWidget;
+    private SwipeRefreshLayout swipeToRefreshWidget;
 
     private String username, password, url, driverId, keyword, deviceToken;
 
@@ -68,7 +73,14 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
         ordersListView = findViewById(R.id.ordersListView);
         ordersListView.setDivider(null);
-        //swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
+        swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
+
+        swipeToRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchOrderListWithKeyWord(RequestType.swipeRefreshWidgetUpdate);
+            }
+        });
 
         // TOKEN
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -116,97 +128,93 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        if (url != null) {
-//            AsyncRequester requester = new AsyncRequester(this);
-//            requester.execute();
-//        }
-//        assert (url != null);
-//
-//
-//    }
-
         @Override
     protected void onResume() {
         super.onResume();
 
          //REQUEST WITH KEYWORD
-            final Context context = this;
+//            final Context context = this;
+//
+//            ordersList = new ArrayList<>();
+//                    //ordersList.clear();
+//                   //final ArrayList<OrderDataModel> newOrderList = new ArrayList<>();
+//
+//            ordersList.clear();
+//            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
+//
+//            final JSONObject requestBody = new JSONObject();
+//
+//            try {
+//                requestBody.put("request_type", "get_order_list");
+//                requestBody.put("id", driverId);
+//                requestBody.put("keyword", keyword);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+//
+//                @Override
+//                public void onResponse(JSONObject response) {
+//
+//                    try {
+//                        if (!response.optString("status").equals("OK")) {
+//                            Toast.makeText(context, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
+//                        } else {
+//                            JSONArray jsonArray = response.getJSONArray("data");
+//
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                                OrderDataModel currentOrder = new OrderDataModel();
+//                                JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
+//
+//                                currentOrder.setId(currentJsonArrayObject.getInt("id"));
+//                                currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
+//                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+//                                currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
+//                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+//                                currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
+//                                currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
+//                                currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
+//                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
+//                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
+//
+//                                ordersList.add(currentOrder);
+//                            }
+//
+//                            setupListView();
+//                        }
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG);
+//                }
+//            });
+//
+//            requestQueue.add(request);
 
-            ordersList = new ArrayList<>();
-                    //ordersList.clear();
-                   //final ArrayList<OrderDataModel> newOrderList = new ArrayList<>();
-
-            ordersList.clear();
-            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
-
-            final JSONObject requestBody = new JSONObject();
-
-            try {
-                requestBody.put("request_type", "get_order_list");
-                requestBody.put("id", driverId);
-                requestBody.put("keyword", keyword);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-
-                    try {
-                        if (!response.optString("status").equals("OK")) {
-                            Toast.makeText(context, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
-                        } else {
-                            JSONArray jsonArray = response.getJSONArray("data");
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-
-                                OrderDataModel currentOrder = new OrderDataModel();
-                                JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
-
-                                currentOrder.setId(currentJsonArrayObject.getInt("id"));
-                                currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
-                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                                currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
-                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                                currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
-                                currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
-                                currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
-                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
-                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
-
-                                ordersList.add(currentOrder);
-                            }
-
-                            setupListView();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG);
-                }
-            });
-
-            requestQueue.add(request);
+            fetchOrderListWithKeyWord(RequestType.regularUpdate);
 
     }
+
+
 
     // Methods
     private void retrieveJSONwithAuthentification() {
 
         //showSimpleProgressDialog(this, "loading", "fetching JSON", false);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Загружаю информацию ...");
+        progressDialog.setCancelable(false);
+
+        progressDialog.show();
 
         final JSONObject requestBody = new JSONObject();
 
@@ -258,8 +266,11 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     ordersList.add(currentOrder);
                                 }
                                 setupListView();
+                                swipeToRefreshWidget.setRefreshing(false);
                             }
                             else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
+                            swipeToRefreshWidget.setRefreshing(false);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -271,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                     public void onErrorResponse(VolleyError error) {
                         // displays error in Toast if occurrs
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        swipeToRefreshWidget.setRefreshing(false);
                     }
                 });
 
@@ -281,7 +293,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     private void setupListView() {
 
-        removeSimpleProgressDialog();
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
 
         listAdapter = new OrdersListViewAdapter(this, ordersList, swipeToRefreshWidget, url, keyword, driverId);
         ordersListView.setAdapter(listAdapter);
@@ -304,54 +317,11 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         });
     }
 
-    private static void showSimpleProgressDialog(Context context, String title, String message, boolean isCancelable) {
-        try {
-            if (progressDialog == null) {
-                progressDialog = ProgressDialog.show(context, title, message);
-                progressDialog.setCancelable(isCancelable);
-            }
-            if (!progressDialog.isShowing()) {
-                progressDialog.show();
-            }
-        }
-        catch (IllegalArgumentException ie){
-            ie.printStackTrace();
-        }
-        catch (RuntimeException re) {
-            re.printStackTrace();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void removeSimpleProgressDialog() {
-        try {
-            if (progressDialog != null) {
-                if (!progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    progressDialog = null;
-                }
-            }
-        }
-        catch (IllegalArgumentException ie){
-            ie.printStackTrace();
-        }
-        catch (RuntimeException re) {
-            re.printStackTrace();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
 
     private void showLoginDialog(){
         LoginDialog loginDialog = new LoginDialog();
-
         loginDialog.show(getSupportFragmentManager(), "loginDialog");
-        // Disable OK button whilst not all the fields filled
-        //((LoginDialog)loginDialog).get
+
     }
 
 
@@ -368,112 +338,73 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         FileHolder.writeLoginDataToFile(username, password, socket, this);
     }
 
-    // LEGACY
-    class AsyncRequester extends AsyncTask {
 
-        ArrayList <OrderDataModel> newOrderList;
+    public void  fetchOrderListWithKeyWord(final RequestType requestType) {
+        final Context context = this;
+        ordersList = new ArrayList<>();
 
-        private ProgressDialog progressDialog;
+        final JSONObject requestBody = new JSONObject();
 
-        public AsyncRequester(MainActivity activity) {
-            progressDialog = new ProgressDialog(activity);
-            newOrderList = new ArrayList<>();
+        try {
+            requestBody.put("request_type", "get_order_list");
+            requestBody.put("id", driverId);
+            requestBody.put("keyword", keyword);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.setMessage("loading ...");
-            progressDialog.setCancelable(false);
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
 
-            progressDialog.show();
-        }
+            @Override
+            public void onResponse(JSONObject response) {
 
-        @Override
-        protected Object doInBackground(Object[] objects) {
-//            try {
-//                TimeUnit.SECONDS.sleep(2);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+                try {
+                    if (!response.optString("status").equals("OK")) {
+                        Toast.makeText(context, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
+                    } else {
+                        JSONArray jsonArray = response.getJSONArray("data");
 
-            final ArrayList<OrderDataModel> resultList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
 
-            final JSONObject requestBody = new JSONObject();
+                            OrderDataModel currentOrder = new OrderDataModel();
+                            JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
 
-            try {
-                requestBody.put("request_type", "get_order_list");
-                requestBody.put("id", driverId);
-                requestBody.put("keyword", keyword);
+                            currentOrder.setId(currentJsonArrayObject.getInt("id"));
+                            currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
+                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                            currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
+                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                            currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
+                            currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
+                            currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
+                            currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
+                            currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-
-                    try {
-                        if (!response.optString("status").equals("OK")) {
-                            Toast.makeText(MainActivity.this, "Keyword/ID hasn't applied by server", Toast.LENGTH_LONG);
-                        } else {
-                            JSONArray jsonArray = response.getJSONArray("data");
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-
-                                OrderDataModel currentOrder = new OrderDataModel();
-                                JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
-
-                                currentOrder.setId(currentJsonArrayObject.getInt("id"));
-                                currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
-                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                                currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
-                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                                currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
-                                currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
-                                currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
-                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
-                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
-
-                                newOrderList.add(currentOrder);
-                            }
+                            ordersList.add(currentOrder);
                         }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        setupListView();
+                        if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
                     }
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(MainActivity.this, "Server Response Error", Toast.LENGTH_LONG);
-                }
-            });
 
-            // add to request queue
-            RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ MainActivity.this);
-            requestQueue.add(request);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG);
+                if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
 
+            }
+        });
 
-            return null;
-        }
+        //swipeRefreshLayout.setRefreshing(true );
+        RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ MainActivity.this);
+        requestQueue.add(request);
 
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-
-            //ordersList.clear();
-            ordersList = new ArrayList<>();
-
-            System.out.println("        NEWORDERLIST SIZE: " + newOrderList.size());
-            ordersList.addAll(newOrderList);
-
-            listAdapter.notifyDataSetChanged();
-        }
     }
 }

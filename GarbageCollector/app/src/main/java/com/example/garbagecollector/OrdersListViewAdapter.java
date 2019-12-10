@@ -143,46 +143,9 @@ public class OrdersListViewAdapter extends BaseAdapter {
 //        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
-//                refreshUI();
-
-                // ====== from site ============
-//                notifyDataSetChanged();
 //                dataSet.clear();
 //                fetchOrderListWithKeyWord();
-                // =============================
-//                OrderDataModel sampleOrder = new OrderDataModel();
-//                sampleOrder.setOriginAdress("******* origin address");
-//                sampleOrder.setCustomerName("******* customer name");
-//                dataSet.add(sampleOrder);
-//                OrdersListViewAdapter.this.notifyDataSetChanged();
-//                swipeRefreshLayout.setRefreshing(false);
-
-                // SYNC REQUEST
-//                final JSONObject requestBody = new JSONObject();
 //
-//                try {
-//                    requestBody.put("request_type", "get_order_list");
-//                    requestBody.put("id", driverId);
-//                    requestBody.put("keyword", keyword);
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                RequestFuture<JSONObject> future = RequestFuture.newFuture();
-//                JsonObjectRequest request = new JsonObjectRequest(url, requestBody, future, future);
-//                RequestQueue requestQueue = Volley.newRequestQueue(context);
-//                requestQueue.add(request);
-//
-//                try {
-//                    JSONObject response = future.get(); // this will block
-//                    System.out.println("RESPONSE --> " + response);
-//
-//                } catch (InterruptedException e) {
-//                    // exception handling
-//                } catch (ExecutionException e) {
-//                    // exception handling
-//                }
 //
 //            }
 //        });
@@ -190,29 +153,25 @@ public class OrdersListViewAdapter extends BaseAdapter {
         return view;
     }
 
-//    public void updateOrdersLists(ArrayList<OrderDataModel> newList) {
-//        dataSet.clear();
-//        dataSet.addAll(newList);
-//        this.notifyDataSetChanged();
-//    }
-
 
     private void refreshUI() {
             // TODO request here
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                notifyDataSetChanged();
+//
+//                dataSet = new ArrayList<>();
+//                ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
+//                dataSet.addAll(newList);
+//            }
+//        },1000);
+//
+//        swipeRefreshLayout.setRefreshing(false);
 
-                dataSet = new ArrayList<>();
-                ArrayList<OrderDataModel> newList = HttpRequester.fetchOrderListWithKeyWord(context.getApplicationContext(), url, keyword, driverId);
-                dataSet.addAll(newList);
-            }
-        },1000);
 
-        swipeRefreshLayout.setRefreshing(false);
 
     }
 
@@ -277,6 +236,7 @@ public class OrdersListViewAdapter extends BaseAdapter {
             }
         });
 
+        //swipeRefreshLayout.setRefreshing(true );
         RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ context);
         requestQueue.add(request);
 

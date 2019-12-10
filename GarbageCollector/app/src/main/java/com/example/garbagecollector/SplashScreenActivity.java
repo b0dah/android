@@ -7,20 +7,25 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private final int SPLASH_SCREEN_TIME_OUT = 2000;
-    TextView appTitleTextView;
+    //TextView appTitleTextView;
+    ImageView logoTitleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
-        appTitleTextView = (TextView) findViewById(R.id.app_title);
-        appTitleTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_scale));
+
+        logoTitleImageView = findViewById(R.id.logo_title);
+
+        logoTitleImageView.setImageResource(R.drawable.logo_title);
+
+        logoTitleImageView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_transition));
 
         getSupportActionBar().hide();
 
