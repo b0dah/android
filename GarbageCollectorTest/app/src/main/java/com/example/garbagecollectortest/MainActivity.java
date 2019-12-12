@@ -11,6 +11,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView ordersTableView;
+    TextView testTextView;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -74,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("TOKEN " + token);
                     }
                 });
+
+        testTextView = findViewById(R.id.textView);
+
+        int a = 2;
+
+        testTextView.setText(2);
+
+
     }
 
 
