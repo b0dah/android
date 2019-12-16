@@ -266,10 +266,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     ordersList.add(currentOrder);
                                 }
                                 setupListView();
-                                swipeToRefreshWidget.setRefreshing(false);
+                                //swipeToRefreshWidget.setRefreshing(false);
                             }
                             else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
-                            swipeToRefreshWidget.setRefreshing(false);
+                            //swipeToRefreshWidget.setRefreshing(false);
 
 
                         } catch (JSONException e) {
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                     public void onErrorResponse(VolleyError error) {
                         // displays error in Toast if occurrs
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        swipeToRefreshWidget.setRefreshing(false);
+                        //swipeToRefreshWidget.setRefreshing(false);
                     }
                 });
 
