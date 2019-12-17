@@ -86,6 +86,13 @@ public class OrdersListViewAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
 
+//        if (dataSet.size() < 0) {
+//            LayoutInflater inflater = (LayoutInflater) context
+//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            view = inflater.inflate(R.layout.order_cell_layout, null, true);
+//            return view;
+//        }
+
         if (view == null) {
             holder = new ViewHolder();
 

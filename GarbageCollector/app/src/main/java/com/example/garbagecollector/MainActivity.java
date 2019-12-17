@@ -246,30 +246,38 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                 ordersList = new ArrayList<>();
 
                                 JSONArray jsonArray = json.getJSONArray("data");
+                                System.out.println("        length     "+jsonArray.length());
 
-                                for (int i=0; i<jsonArray.length(); i++) {
+                                if (jsonArray.length() > 0) {
 
-                                    OrderDataModel currentOrder = new OrderDataModel();
-                                    JSONObject currentJsonObject = jsonArray.getJSONObject(i);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                                    currentOrder.setId(currentJsonObject.getInt("id"));
-                                    currentOrder.setCustomerName(currentJsonObject.getString("customer_name"));
-                                    currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
-                                    currentOrder.setDestinantionAddress(currentJsonObject.getString("destination_address"));
-                                    currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
-                                    currentOrder.setDeliveryTime(currentJsonObject.getString("delivery_time"));
-                                    currentOrder.setPayment(currentJsonObject.getInt("payment"));
-                                    currentOrder.setStatus(currentJsonObject.getInt("status"));
-                                    currentOrder.setNumberOfMovers(currentJsonObject.getInt("number_of_movers"));
-                                    currentOrder.setPhoneNumber(currentJsonObject.getString("customer_phone_number"));
+                                        OrderDataModel currentOrder = new OrderDataModel();
+                                        JSONObject currentJsonObject = jsonArray.getJSONObject(i);
 
-                                    ordersList.add(currentOrder);
+                                        currentOrder.setId(currentJsonObject.getInt("id"));
+                                        currentOrder.setCustomerName(currentJsonObject.getString("customer_name"));
+                                        currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
+                                        currentOrder.setDestinantionAddress(currentJsonObject.getString("destination_address"));
+                                        currentOrder.setOriginAdress(currentJsonObject.getString("origin_address"));
+                                        currentOrder.setDeliveryTime(currentJsonObject.getString("delivery_time"));
+                                        currentOrder.setPayment(currentJsonObject.getInt("payment"));
+                                        currentOrder.setStatus(currentJsonObject.getInt("status"));
+                                        currentOrder.setNumberOfMovers(currentJsonObject.getInt("number_of_movers"));
+                                        currentOrder.setPhoneNumber(currentJsonObject.getString("customer_phone_number"));
+
+                                        ordersList.add(currentOrder);
+                                    }
+                                    setupListView();
+                                    //swipeToRefreshWidget.setRefreshing(false);
+                                } else {
+                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Ты все выполнил. Хорошая работа \uD83E\uDD21", Toast.LENGTH_LONG);
                                 }
-                                setupListView();
-                                //swipeToRefreshWidget.setRefreshing(false);
                             }
                             else Toast.makeText(getApplicationContext(), "WRONG LOGIN DATA!", Toast.LENGTH_LONG).show();
                             //swipeToRefreshWidget.setRefreshing(false);
+                           if (progressDialog.isShowing()) progressDialog.dismiss();
 
 
                         } catch (JSONException e) {
@@ -365,31 +373,42 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                     } else {
                         JSONArray jsonArray = response.getJSONArray("data");
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        System.out.println("        length     "+jsonArray.length());
+                        if (jsonArray.length() > 0) {
 
-                            OrderDataModel currentOrder = new OrderDataModel();
-                            JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                            currentOrder.setId(currentJsonArrayObject.getInt("id"));
-                            currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
-                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                            currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
-                            currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
-                            currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
-                            currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
-                            currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
-                            currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
-                            currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
+                                OrderDataModel currentOrder = new OrderDataModel();
+                                JSONObject currentJsonArrayObject = jsonArray.getJSONObject(i);
 
-                            ordersList.add(currentOrder);
+                                currentOrder.setId(currentJsonArrayObject.getInt("id"));
+                                currentOrder.setCustomerName(currentJsonArrayObject.getString("customer_name"));
+                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                                currentOrder.setDestinantionAddress(currentJsonArrayObject.getString("destination_address"));
+                                currentOrder.setOriginAdress(currentJsonArrayObject.getString("origin_address"));
+                                currentOrder.setDeliveryTime(currentJsonArrayObject.getString("delivery_time"));
+                                currentOrder.setPayment(currentJsonArrayObject.getInt("payment"));
+                                currentOrder.setStatus(currentJsonArrayObject.getInt("status"));
+                                currentOrder.setNumberOfMovers(currentJsonArrayObject.getInt("number_of_movers"));
+                                currentOrder.setPhoneNumber(currentJsonArrayObject.getString("customer_phone_number"));
+
+                                ordersList.add(currentOrder);
+                            }
+
+                            setupListView();
+                            if (requestType == RequestType.swipeRefreshWidgetUpdate)
+                                swipeToRefreshWidget.setRefreshing(false);
+                        } else {
+                            if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
+
+                            //setupListView();
+                            Toast.makeText(MainActivity.this, "Ты все выполнил. Хорошая работа \uD83E\uDD21", Toast.LENGTH_LONG);
                         }
-
-                        setupListView();
-                        if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
                 }
 
             }
@@ -405,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         //swipeRefreshLayout.setRefreshing(true );
         RequestQueue requestQueue = Volley.newRequestQueue(/*this*/ MainActivity.this);
         requestQueue.add(request);
-
     }
+
+
 }
