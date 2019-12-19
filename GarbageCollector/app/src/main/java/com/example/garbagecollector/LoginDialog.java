@@ -99,7 +99,7 @@ public class LoginDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (LoginDialogListener) context;
+            listener = (LoginDialogListener) context; // Экземпляр Main Activity, который имеет доступ только к функционалу, содержащемуся в интерфейсе
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement LoginDialogListener");
         }
