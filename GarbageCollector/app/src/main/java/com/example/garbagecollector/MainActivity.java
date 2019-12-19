@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     //Fields
     private ListView ordersListView;
+    private TextView emptyOrderListTextView;
     private ArrayList <OrderDataModel> ordersList;
     private /*ListAdapter*/ OrdersListViewAdapter listAdapter;
 
@@ -83,10 +85,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle(Html.fromHtml("<font color=\"grey\">" + "Ордерс" + "</font>")); // getSupportActionBar().setTitle("Ордеры");
 
-
-
-
         ordersListView = findViewById(R.id.ordersListView);
+        emptyOrderListTextView = findViewById(R.id.emptyListTextView);
         ordersListView.setDivider(null);
         swipeToRefreshWidget = findViewById(R.id.pullToRefreshWidget);
 
@@ -149,9 +149,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
             LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                     new IntentFilter("notification_event"));
-
-//           LocalBroadcastManager.getInstance(this)
-//                    .registerReceiver(broadcastReceiver, NotificationsBroadcastReceiver.BROADCAST_INTENT_FILTER);
 
             fetchOrderListWithKeyWord(RequestType.regularUpdate);
     }
@@ -229,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                                     //swipeToRefreshWidget.setRefreshing(false);
                                 } else {
                                     if (progressDialog.isShowing()) progressDialog.dismiss();
+                                    ordersListView.setEmptyView(emptyOrderListTextView);
                                     Toast.makeText(MainActivity.this, "Ты все выполнил. Хорошая работа \uD83E\uDD21", Toast.LENGTH_LONG);
                                 }
                             }
@@ -306,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
 
     public void  fetchOrderListWithKeyWord(final RequestType requestType) {
         final Context context = this;
+
         ordersList = new ArrayList<>();
 
         final JSONObject requestBody = new JSONObject();
@@ -355,8 +354,12 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
                             setupListView();
                             if (requestType == RequestType.swipeRefreshWidgetUpdate)
                                 swipeToRefreshWidget.setRefreshing(false);
+                            if(ordersListView.getVisibility() == View.GONE)
+                                ordersListView.setVisibility(View.VISIBLE);
                         } else {
                             if (requestType==RequestType.swipeRefreshWidgetUpdate) swipeToRefreshWidget.setRefreshing(false);
+
+                            ordersListView.setVisibility(View.GONE);
 
                             //setupListView();
                             Toast.makeText(MainActivity.this, "Ты все выполнил. Хорошая работа \uD83E\uDD21", Toast.LENGTH_LONG);
