@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String message = intent.getStringExtra("message");
+            // Updating when Notification came
             fetchOrderListWithKeyWord(RequestType.regularUpdate);
         }
     };
@@ -79,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle(Html.fromHtml("<font color=\"grey\">" + "Ордерс" + "</font>")); // getSupportActionBar().setTitle("Ордеры");
+
+
+
 
         ordersListView = findViewById(R.id.ordersListView);
         ordersListView.setDivider(null);
@@ -141,15 +147,18 @@ public class MainActivity extends AppCompatActivity implements LoginDialog.Login
     protected void onResume() {
         super.onResume();
 
-            LocalBroadcastManager.getInstance(MainActivity.this)
-                    .registerReceiver(broadcastReceiver, NotificationsBroadcastReceiver.BROADCAST_INTENT_FILTER);
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter("notification_event"));
+
+//           LocalBroadcastManager.getInstance(this)
+//                    .registerReceiver(broadcastReceiver, NotificationsBroadcastReceiver.BROADCAST_INTENT_FILTER);
 
             fetchOrderListWithKeyWord(RequestType.regularUpdate);
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(MainActivity.this)
+        LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(broadcastReceiver);
         super.onPause();
     }

@@ -64,7 +64,9 @@ public class FirebaseService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        
+        Intent intent = new Intent("notification_event");
+        intent.putExtra("message", "order_list_changed");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(remoteMessage.getNotification().getTitle())
